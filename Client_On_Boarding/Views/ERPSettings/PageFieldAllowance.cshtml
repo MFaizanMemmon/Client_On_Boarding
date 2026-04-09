@@ -1,0 +1,704 @@
+﻿@{
+    ViewData["Title"] = "Field Allowance";
+}
+
+@* ── Page Header ── *@
+<div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+    <div>
+        <div class="flex items-center gap-2 text-sm text-gray-400 mb-1">
+            <a href="javascript:void(0)" class="hover:text-blue-600 transition-colors">Dashboard</a>
+            <span>/</span>
+            <a href="javascript:void(0)" class="hover:text-blue-600 transition-colors">General Settings</a>
+            <span>/</span>
+            <span class="text-gray-600">Field Allowance</span>
+        </div>
+        <h1 class="text-2xl font-semibold text-gray-800">Field Allowance</h1>
+        <p class="text-sm text-gray-500 mt-0.5">Configure which fields are visible, editable, or required for each module</p>
+    </div>
+    <div class="flex items-center gap-3">
+        <button type="button" onclick="resetToDefault()"
+                class="text-sm text-gray-600 border border-gray-200 rounded-lg px-4 py-2.5 hover:bg-gray-50 transition-colors">
+            Reset to Default
+        </button>
+        <button type="button" onclick="saveFieldAllowances()"
+                class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-white" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+            </svg>
+            Save Settings
+        </button>
+    </div>
+</div>
+
+<form id="fieldAllowanceForm" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="flex items-start gap-6">
+        @* ── LEFT COLUMN (Module Navigation) ── *@
+        <div class="lg:w-72 xl:w-80 flex-shrink-0">
+            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden sticky top-24">
+                <div class="flex items-center gap-3 px-5 py-4 border-b border-gray-100 bg-gray-50">
+                    <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-blue-600" viewBox="0 0 24 24">
+                            <path d="M4 6h16v2H4zm2-4h12v2H6zm14 8H4v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-sm font-semibold text-gray-700">Modules</h2>
+                </div>
+                <div class="px-3 py-3 space-y-1">
+                    <button type="button" onclick="showModule('products')" class="module-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center gap-3" data-module="products">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-gray-500" viewBox="0 0 24 24">
+                            <path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM10 4h4v2h-4V4z" />
+                        </svg>
+                        Products
+                    </button>
+                    <button type="button" onclick="showModule('customers')" class="module-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center gap-3" data-module="customers">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-gray-500" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        </svg>
+                        Customers
+                    </button>
+                    <button type="button" onclick="showModule('invoices')" class="module-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center gap-3" data-module="invoices">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-gray-500" viewBox="0 0 24 24">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14H7v-2h3v2zm0-4H7v-2h3v2zm0-4H7V7h3v2zm6 8h-3v-2h3v2zm0-4h-3v-2h3v2zm0-4h-3V7h3v2z" />
+                        </svg>
+                        Invoices
+                    </button>
+                    <button type="button" onclick="showModule('sales_orders')" class="module-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center gap-3" data-module="sales_orders">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-gray-500" viewBox="0 0 24 24">
+                            <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z" />
+                        </svg>
+                        Sales Orders
+                    </button>
+                    <button type="button" onclick="showModule('purchase_orders')" class="module-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center gap-3" data-module="purchase_orders">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-gray-500" viewBox="0 0 24 24">
+                            <path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5s-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63c-.75.51-1.38 1.18-1.82 1.96H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.79 2.59 5.01 4 8.19 4s6.4-1.41 8.19-4H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8z" />
+                        </svg>
+                        Purchase Orders
+                    </button>
+                    <button type="button" onclick="showModule('employees')" class="module-btn w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center gap-3" data-module="employees">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-gray-500" viewBox="0 0 24 24">
+                            <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm8 6v2c0 .55-.45 1-1 1h-2c-.55 0-1-.45-1-1v-2c0-.55.45-1 1-1h2c.55 0 1 .45 1 1zM8 11c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V17c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-.5c0-2.33-4.67-3.5-7-3.5z" />
+                        </svg>
+                        Employees
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        @* ── RIGHT COLUMN (Field Settings) ── *@
+        <div class="flex-1 space-y-6">
+
+            @* Products Module *@
+            <div id="module-products" class="module-panel bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-transparent">
+                    <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-white" viewBox="0 0 24 24">
+                            <path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM10 4h4v2h-4V4z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-800">Products Module Fields</h2>
+                        <p class="text-xs text-gray-500">Configure visibility and requirements for product fields</p>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Product Name -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Product Name</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="ProductFields" value="IsProductNameShow" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="ProductFields" value="IsProductNameRequired" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-500"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Required</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Main product identifier</p>
+                        </div>
+
+                        <!-- SKU / Barcode -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">SKU / Barcode</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="ProductFields" value="HasSKU" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="ProductFields" value="HasSKURequired" class="sr-only peer" />
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-500"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Required</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Stock Keeping Unit / Barcode</p>
+                        </div>
+
+                        <!-- Unit -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Unit</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="ProductFields" value="HasUnit" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="ProductFields" value="HasUnitRequired" class="sr-only peer" />
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-500"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Required</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Unit of measurement (pcs, kg, etc.)</p>
+                        </div>
+
+                        <!-- Price -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Price</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="ProductFields" value="IsPriceShow" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="ProductFields" value="IsPriceRequired" class="sr-only peer" />
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-500"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Required</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Selling price</p>
+                        </div>
+
+                        <!-- Cost Price -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Cost Price</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="ProductFields" value="HasCostPrice" class="sr-only peer" />
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Purchase cost (profit calculation)</p>
+                        </div>
+
+                        <!-- Opening Balance -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Opening Balance</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="ProductFields" value="IsOpeningBalanceShow" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Initial stock quantity</p>
+                        </div>
+
+                        <!-- Minimum Stock Alert -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Minimum Stock Alert</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="ProductFields" value="HasMinStock" class="sr-only peer" />
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Reorder threshold</p>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Category</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="ProductFields" value="HasCategory" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Product category/group</p>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Description</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="ProductFields" value="HasDescription" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Detailed product description</p>
+                        </div>
+
+                        <!-- Tax Rate -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Tax Rate</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="ProductFields" value="HasTaxRate" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">GST / VAT / Sales tax</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* Customers Module *@
+            <div id="module-customers" class="module-panel bg-white border border-gray-200 rounded-xl overflow-hidden hidden">
+                <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-green-50 to-transparent">
+                    <div class="w-8 h-8 rounded-lg bg-green-600 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-white" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-800">Customers Module Fields</h2>
+                        <p class="text-xs text-gray-500">Configure visibility and requirements for customer fields</p>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Customer Name -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Customer Name</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="CustomerFields" value="IsCustomerNameShow" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="CustomerFields" value="IsCustomerNameRequired" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-red-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Required</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Full name or company name</p>
+                        </div>
+
+                        <!-- Email Address -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Email Address</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="CustomerFields" value="IsEmailShow" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="CustomerFields" value="IsEmailRequired" class="sr-only peer" />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-red-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Required</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Primary email address</p>
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Phone Number</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="CustomerFields" value="IsPhoneShow" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="CustomerFields" value="IsPhoneRequired" class="sr-only peer" />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-red-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Required</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Contact phone number</p>
+                        </div>
+
+                        <!-- Billing Address -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Billing Address</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="CustomerFields" value="HasBillingAddress" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Street, city, state, zip</p>
+                        </div>
+
+                        <!-- Shipping Address -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Shipping Address</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="CustomerFields" value="HasShippingAddress" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Delivery address (if different)</p>
+                        </div>
+
+                        <!-- Tax Number -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Tax Number / GSTIN</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="CustomerFields" value="HasTaxNumber" class="sr-only peer" />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">For tax invoice purposes</p>
+                        </div>
+
+                        <!-- Credit Limit -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Credit Limit</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="CustomerFields" value="HasCreditLimit" class="sr-only peer" />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Maximum allowed credit</p>
+                        </div>
+
+                        <!-- Opening Balance -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Opening Balance</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="CustomerFields" value="IsOpeningBalanceShow" class="sr-only peer" />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Previous outstanding balance</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* Invoices Module *@
+            <div id="module-invoices" class="module-panel bg-white border border-gray-200 rounded-xl overflow-hidden hidden">
+                <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-transparent">
+                    <div class="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-white" viewBox="0 0 24 24">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14H7v-2h3v2zm0-4H7v-2h3v2zm0-4H7V7h3v2zm6 8h-3v-2h3v2zm0-4h-3v-2h3v2zm0-4h-3V7h3v2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-800">Invoices Module Fields</h2>
+                        <p class="text-xs text-gray-500">Configure visibility and requirements for invoice fields</p>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Invoice Number -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Invoice Number</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="InvoiceFields" value="IsInvoiceNoShow" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="InvoiceFields" value="IsInvoiceNoRequired" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-red-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Required</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Unique invoice identifier</p>
+                        </div>
+
+                        <!-- Invoice Date -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Invoice Date</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="InvoiceFields" value="IsDateShow" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="InvoiceFields" value="IsDateRequired" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-red-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Required</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Date of issue</p>
+                        </div>
+
+                        <!-- Due Date -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Due Date</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="InvoiceFields" value="IsDueDateShow" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Payment deadline</p>
+                        </div>
+
+                        <!-- Subtotal -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Subtotal</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="InvoiceFields" value="IsSubtotalShow" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Amount before tax</p>
+                        </div>
+
+                        <!-- Tax Amount -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Tax Amount</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="InvoiceFields" value="IsTaxShow" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Total tax charged</p>
+                        </div>
+
+                        <!-- Total Amount -->
+                        <div class="field-card border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-sm font-semibold text-gray-700">Total Amount</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="InvoiceFields" value="IsTotalShow" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Show</span>
+                                    </label>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="InvoiceFields" value="IsTotalRequired" class="sr-only peer" checked />
+                                        <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-red-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                                        <span class="ml-2 text-xs text-gray-500">Required</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400">Grand total</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* Other Modules Placeholder *@
+            <div id="module-sales_orders" class="module-panel bg-white border border-gray-200 rounded-xl overflow-hidden hidden">
+                <div class="flex items-center justify-center py-16 flex-col">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 fill-gray-300 mb-3" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                    </svg>
+                    <p class="text-gray-400 text-center">Sales Orders configuration coming soon</p>
+                </div>
+            </div>
+
+            <div id="module-purchase_orders" class="module-panel bg-white border border-gray-200 rounded-xl overflow-hidden hidden">
+                <div class="flex items-center justify-center py-16 flex-col">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 fill-gray-300 mb-3" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                    </svg>
+                    <p class="text-gray-400 text-center">Purchase Orders configuration coming soon</p>
+                </div>
+            </div>
+
+            <div id="module-employees" class="module-panel bg-white border border-gray-200 rounded-xl overflow-hidden hidden">
+                <div class="flex items-center justify-center py-16 flex-col">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 fill-gray-300 mb-3" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                    </svg>
+                    <p class="text-gray-400 text-center">Employees configuration coming soon</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        let currentModule = 'products';
+
+        function showModule(moduleName) {
+            // Hide all module panels
+            document.querySelectorAll('.module-panel').forEach(panel => {
+                panel.classList.add('hidden');
+            });
+        
+            // Show selected module panel
+            const selectedPanel = document.getElementById(`module-${moduleName}`);
+            if (selectedPanel) {
+                selectedPanel.classList.remove('hidden');
+            }
+        
+            // Update button active states
+            document.querySelectorAll('.module-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-50', 'text-blue-700');
+                btn.classList.add('text-gray-700');
+                const btnModule = btn.getAttribute('data-module');
+                if (btnModule === moduleName) {
+                    btn.classList.add('bg-blue-50', 'text-blue-700');
+                    btn.classList.remove('text-gray-700');
+                }
+            });
+        
+            currentModule = moduleName;
+        }
+
+        function resetToDefault() {
+            if (confirm('Reset all field allowances to default settings?')) {
+                // Reset Products
+                document.querySelectorAll('input[name="ProductFields"]').forEach(cb => {
+                    const value = cb.value;
+                    if (value === 'IsProductNameShow' || value === 'HasSKU' || value === 'HasUnit' ||
+                        value === 'IsPriceShow' || value === 'IsOpeningBalanceShow' || value === 'HasCategory' ||
+                        value === 'HasDescription' || value === 'HasTaxRate') {
+                        cb.checked = true;
+                    } else if (value === 'IsProductNameRequired') {
+                        cb.checked = true;
+                    } else {
+                        cb.checked = false;
+                    }
+                });
+            
+                // Reset Customers
+                document.querySelectorAll('input[name="CustomerFields"]').forEach(cb => {
+                    const value = cb.value;
+                    if (value === 'IsCustomerNameShow' || value === 'IsEmailShow' || value === 'IsPhoneShow' ||
+                        value === 'HasBillingAddress' || value === 'HasShippingAddress') {
+                        cb.checked = true;
+                    } else if (value === 'IsCustomerNameRequired') {
+                        cb.checked = true;
+                    } else {
+                        cb.checked = false;
+                    }
+                });
+            
+                // Reset Invoices
+                document.querySelectorAll('input[name="InvoiceFields"]').forEach(cb => {
+                    const value = cb.value;
+                    if (value === 'IsInvoiceNoShow' || value === 'IsDateShow' || value === 'IsDueDateShow' ||
+                        value === 'IsSubtotalShow' || value === 'IsTaxShow' || value === 'IsTotalShow') {
+                        cb.checked = true;
+                    } else if (value === 'IsInvoiceNoRequired' || value === 'IsDateRequired' || value === 'IsTotalRequired') {
+                        cb.checked = true;
+                    } else {
+                        cb.checked = false;
+                    }
+                });
+            
+                showToast('Reset to default settings', 'info');
+            }
+        }
+
+        function saveFieldAllowances() {
+            const allowances = {
+                products: {},
+                customers: {},
+                invoices: {}
+            };
+        
+            document.querySelectorAll('input[name="ProductFields"]').forEach(cb => {
+                allowances.products[cb.value] = cb.checked;
+            });
+        
+            document.querySelectorAll('input[name="CustomerFields"]').forEach(cb => {
+                allowances.customers[cb.value] = cb.checked;
+            });
+        
+            document.querySelectorAll('input[name="InvoiceFields"]').forEach(cb => {
+                allowances.invoices[cb.value] = cb.checked;
+            });
+        
+            console.log('Saving allowances:', allowances);
+            showToast('Field allowances saved successfully!', 'success');
+        
+            // Here you would submit via AJAX
+            // document.getElementById('fieldAllowanceForm').submit();
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-4 right-4 z-50 px-4 py-3 rounded-lg text-white text-sm ${type === 'success' ? 'bg-green-600' : 'bg-blue-600'} shadow-lg transition-all duration-300`;
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialize - show products module by default
+        showModule('products');
+    </script>
+}

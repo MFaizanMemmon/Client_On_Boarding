@@ -1,0 +1,477 @@
+﻿@{
+    ViewData["Title"] = "Client Onboarding";
+}
+
+@* ── Page Header ── *@
+<div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+    <div>
+        <h1 class="text-2xl font-semibold text-gray-800">Client Onboarding</h1>
+        <p class="text-sm text-gray-500 mt-0.5">Review and complete client onboarding applications</p>
+    </div>
+    <a asp-action="CreateOnboarding" asp-controller="Client"
+           class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-white" viewBox="0 0 24 24">
+            <path d="M18 2c2.206 0 4 1.794 4 4v12c0 2.206-1.794 4-4 4H6c-2.206 0-4-1.794-4-4V6c0-2.206 1.794-4 4-4zm0-2H6a6 6 0 0 0-6 6v12a6 6 0 0 0 6 6h12a6 6 0 0 0 6-6V6a6 6 0 0 0-6-6z" />
+            <path d="M12 18a1 1 0 0 1-1-1V7a1 1 0 0 1 2 0v10a1 1 0 0 1-1 1z" />
+            <path d="M6 12a1 1 0 0 1 1-1h10a1 1 0 0 1 0 2H7a1 1 0 0 1-1-1z" />
+        </svg>
+        New Onboarding
+    </a>
+</div>
+
+@* ── Summary Cards (Onboarding specific) ── *@
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+    <div class="bg-blue-50 rounded-xl p-4">
+        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Pending Review</p>
+        <p class="text-2xl font-semibold text-gray-800">18</p>
+        <span class="inline-block mt-1.5 text-xs font-medium bg-amber-100 text-amber-700 px-2 py-0.5 rounded">Awaiting docs</span>
+    </div>
+    <div class="bg-blue-50 rounded-xl p-4">
+        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">In Progress</p>
+        <p class="text-2xl font-semibold text-gray-800">24</p>
+        <span class="inline-block mt-1.5 text-xs font-medium bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Verification</span>
+    </div>
+    <div class="bg-blue-50 rounded-xl p-4">
+        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Completed</p>
+        <p class="text-2xl font-semibold text-gray-800">63</p>
+        <span class="inline-block mt-1.5 text-xs font-medium bg-green-100 text-green-700 px-2 py-0.5 rounded">This quarter</span>
+    </div>
+    <div class="bg-blue-50 rounded-xl p-4">
+        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Avg. Time</p>
+        <p class="text-2xl font-semibold text-gray-800">4.2d</p>
+        <span class="inline-block mt-1.5 text-xs font-medium bg-purple-100 text-purple-700 px-2 py-0.5 rounded">-1.5d vs last</span>
+    </div>
+</div>
+
+@* ── Filters & Search ── *@
+<div class="bg-white border border-gray-200 rounded-xl mb-4">
+    <div class="flex flex-wrap items-center gap-3 px-5 py-3 border-b border-gray-100">
+        <div class="flex items-center flex-1 min-w-[200px] bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 gap-2 focus-within:border-blue-400 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192.904 192.904" class="w-4 h-4 fill-gray-400 flex-shrink-0">
+                <path d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z" />
+            </svg>
+            <input type="text" placeholder="Search by business name, email or ID..."
+                   class="bg-transparent text-sm text-gray-700 outline-none w-full placeholder-gray-400" />
+        </div>
+
+        <select class="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-700 outline-none focus:border-blue-400 transition-colors">
+            <option value="">All Stages</option>
+            <option value="pending">Pending Review</option>
+            <option value="document">Document Collection</option>
+            <option value="verification">Verification</option>
+            <option value="approval">Final Approval</option>
+            <option value="completed">Completed</option>
+            <option value="rejected">Rejected</option>
+        </select>
+
+        <select class="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-700 outline-none focus:border-blue-400 transition-colors">
+            <option value="">All Business Types</option>
+            <option value="llc">LLC</option>
+            <option value="corporation">Corporation</option>
+            <option value="sole">Sole Proprietorship</option>
+            <option value="partnership">Partnership</option>
+        </select>
+
+        <select class="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-700 outline-none focus:border-blue-400 transition-colors">
+            <option value="">Sort by: Newest</option>
+            <option value="oldest">Sort by: Oldest</option>
+            <option value="business">Sort by: Business</option>
+            <option value="stage">Sort by: Stage</option>
+        </select>
+    </div>
+
+    @* ── Onboarding Table ── *@
+    <div class="overflow-x-auto">
+        <table class="min-w-full">
+            <thead class="bg-gray-800 whitespace-nowrap">
+                <tr>
+                    <th class="p-4 text-left text-xs font-medium text-white">Business / Client</th>
+                    <th class="p-4 text-left text-xs font-medium text-white">Contact Info</th>
+                    <th class="p-4 text-left text-xs font-medium text-white">Business Type</th>
+                    <th class="p-4 text-left text-xs font-medium text-white">Onboarding Stage</th>
+                    <th class="p-4 text-left text-xs font-medium text-white">Submitted</th>
+                    <th class="p-4 text-left text-xs font-medium text-white">Progress</th>
+                    <th class="p-4 text-left text-xs font-medium text-white">Assigned</th>
+                    <th class="p-4 text-left text-xs font-medium text-white">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="whitespace-nowrap divide-y divide-gray-100">
+
+                @* Row 1 - Pending Review *@
+                <tr class="even:bg-blue-50 hover:bg-blue-50 transition-colors">
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-semibold flex-shrink-0">NX</div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">Nexova Ltd</p>
+                                <p class="text-xs text-gray-400">Ahmed Raza (Owner)</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div>
+                            <p class="text-sm text-gray-600">ahmed.raza@nexova.com</p>
+                            <p class="text-xs text-gray-400">+92 300 1234567</p>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <span class="text-xs font-medium bg-purple-100 text-purple-700 px-2.5 py-0.5 rounded-full">LLC</span>
+                    </td>
+                    <td class="p-4">
+                        <span class="text-xs font-medium bg-amber-100 text-amber-700 px-2.5 py-0.5 rounded-full">Pending Review</span>
+                    </td>
+                    <td class="p-4 text-sm text-gray-500">2026-03-28</td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-20 bg-gray-200 rounded-full h-1.5">
+                                <div class="bg-amber-500 h-1.5 rounded-full w-2/5"></div>
+                            </div>
+                            <span class="text-xs text-gray-500">40%</span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600">JD</div>
+                            <span class="text-sm text-gray-600">John Doe</span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <button title="View Details" class="text-gray-400 hover:text-blue-600 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 511.999 511.999">
+                                    <path d="M508.745 246.041c-4.574-6.257-113.557-153.206-252.748-153.206C127.513 92.835 18.573 239.784 14 246.041a19.995 19.995 0 0 0 0 19.917c4.573 6.257 113.557 153.206 252.997 153.206 139.44 0 248.425-146.949 252.997-153.206a19.998 19.998 0 0 0-.249-19.917zM255.997 379.164c-102.529 0-191.33-97.533-217.617-123.165C64.667 229.869 153.468 132.835 255.997 132.835c102.524 0 191.319 97.525 217.617 123.164-26.285 25.632-115.08 123.165-217.617 123.165z" />
+                                    <path d="M255.997 172.165c-46.215 0-83.833 37.618-83.833 83.833s37.618 83.833 83.833 83.833 83.833-37.618 83.833-83.833-37.618-83.833-83.833-83.833zm0 127.666c-24.291 0-43.833-19.542-43.833-43.833s19.542-43.833 43.833-43.833 43.833 19.542 43.833 43.833-19.542 43.833-43.833 43.833z" />
+                                </svg>
+                            </button>
+                            <button title="Continue Onboarding" class="text-gray-400 hover:text-blue-600 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 348.882 348.882">
+                                    <path d="m333.988 11.758-.42-.383A43.363 43.363 0 0 0 304.258 0a43.579 43.579 0 0 0-32.104 14.153L116.803 184.231a14.993 14.993 0 0 0-3.154 5.37l-18.267 54.762c-2.112 6.331-1.052 13.333 2.835 18.729 3.918 5.438 10.23 8.685 16.886 8.685h.001c2.879 0 5.693-.592 8.362-1.76l52.89-23.138a14.985 14.985 0 0 0 5.063-3.626L336.771 73.176c16.166-17.697 14.919-45.247-2.783-61.418zM130.381 234.247l10.719-32.134.904-.99 20.316 18.556-.904.99-31.035 13.578zm184.24-181.304L182.553 197.53l-20.316-18.556L294.305 34.386c2.583-2.828 6.118-4.386 9.954-4.386 3.365 0 6.588 1.252 9.082 3.53l.419.383c5.484 5.009 5.87 13.546.861 19.03z" />
+                                    <path d="M303.85 138.388c-8.284 0-15 6.716-15 15v127.347c0 21.034-17.113 38.147-38.147 38.147H68.904c-21.035 0-38.147-17.113-38.147-38.147V100.413c0-21.034 17.113-38.147 38.147-38.147h131.587c8.284 0 15-6.716 15-15s-6.716-15-15-15H68.904C31.327 32.266.757 62.837.757 100.413v180.321c0 37.576 30.571 68.147 68.147 68.147h181.798c37.576 0 68.147-30.571 68.147-68.147V153.388c.001-8.284-6.715-15-14.999-15z" />
+                                </svg>
+                            </button>
+                            <button title="Delete Application" class="text-gray-400 hover:text-red-500 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z" />
+                                    <path d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+                @* Row 2 - Document Collection *@
+                <tr class="even:bg-blue-50 hover:bg-blue-50 transition-colors">
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-semibold flex-shrink-0">AP</div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">Apexion Inc.</p>
+                                <p class="text-xs text-gray-400">David Osei (CEO)</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div>
+                            <p class="text-sm text-gray-600">david@apexion.com</p>
+                            <p class="text-xs text-gray-400">+1 415 5550172</p>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <span class="text-xs font-medium bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full">Corporation</span>
+                    </td>
+                    <td class="p-4">
+                        <span class="text-xs font-medium bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full">Document Collection</span>
+                    </td>
+                    <td class="p-4 text-sm text-gray-500">2026-03-15</td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-20 bg-gray-200 rounded-full h-1.5">
+                                <div class="bg-blue-500 h-1.5 rounded-full w-3/5"></div>
+                            </div>
+                            <span class="text-xs text-gray-500">60%</span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600">AD</div>
+                            <span class="text-sm text-gray-600">Alen Doe</span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <button title="View Details" class="text-gray-400 hover:text-blue-600 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 511.999 511.999">
+                                    <path d="M508.745 246.041c-4.574-6.257-113.557-153.206-252.748-153.206C127.513 92.835 18.573 239.784 14 246.041a19.995 19.995 0 0 0 0 19.917c4.573 6.257 113.557 153.206 252.997 153.206 139.44 0 248.425-146.949 252.997-153.206a19.998 19.998 0 0 0-.249-19.917zM255.997 379.164c-102.529 0-191.33-97.533-217.617-123.165C64.667 229.869 153.468 132.835 255.997 132.835c102.524 0 191.319 97.525 217.617 123.164-26.285 25.632-115.08 123.165-217.617 123.165z" />
+                                    <path d="M255.997 172.165c-46.215 0-83.833 37.618-83.833 83.833s37.618 83.833 83.833 83.833 83.833-37.618 83.833-83.833-37.618-83.833-83.833-83.833zm0 127.666c-24.291 0-43.833-19.542-43.833-43.833s19.542-43.833 43.833-43.833 43.833 19.542 43.833 43.833-19.542 43.833-43.833 43.833z" />
+                                </svg>
+                            </button>
+                            <button title="Review Documents" class="text-gray-400 hover:text-blue-600 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 348.882 348.882">
+                                    <path d="m333.988 11.758-.42-.383A43.363 43.363 0 0 0 304.258 0a43.579 43.579 0 0 0-32.104 14.153L116.803 184.231a14.993 14.993 0 0 0-3.154 5.37l-18.267 54.762c-2.112 6.331-1.052 13.333 2.835 18.729 3.918 5.438 10.23 8.685 16.886 8.685h.001c2.879 0 5.693-.592 8.362-1.76l52.89-23.138a14.985 14.985 0 0 0 5.063-3.626L336.771 73.176c16.166-17.697 14.919-45.247-2.783-61.418zM130.381 234.247l10.719-32.134.904-.99 20.316 18.556-.904.99-31.035 13.578zm184.24-181.304L182.553 197.53l-20.316-18.556L294.305 34.386c2.583-2.828 6.118-4.386 9.954-4.386 3.365 0 6.588 1.252 9.082 3.53l.419.383c5.484 5.009 5.87 13.546.861 19.03z" />
+                                    <path d="M303.85 138.388c-8.284 0-15 6.716-15 15v127.347c0 21.034-17.113 38.147-38.147 38.147H68.904c-21.035 0-38.147-17.113-38.147-38.147V100.413c0-21.034 17.113-38.147 38.147-38.147h131.587c8.284 0 15-6.716 15-15s-6.716-15-15-15H68.904C31.327 32.266.757 62.837.757 100.413v180.321c0 37.576 30.571 68.147 68.147 68.147h181.798c37.576 0 68.147-30.571 68.147-68.147V153.388c.001-8.284-6.715-15-14.999-15z" />
+                                </svg>
+                            </button>
+                            <button title="Delete Application" class="text-gray-400 hover:text-red-500 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z" />
+                                    <path d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+                @* Row 3 - Verification *@
+                <tr class="even:bg-blue-50 hover:bg-blue-50 transition-colors">
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-pink-100 text-pink-700 flex items-center justify-center text-xs font-semibold flex-shrink-0">CF</div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">Cloudform Pvt.</p>
+                                <p class="text-xs text-gray-400">Priya Nair (Director)</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div>
+                            <p class="text-sm text-gray-600">priya@cloudform.com</p>
+                            <p class="text-xs text-gray-400">+91 98765 43210</p>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <span class="text-xs font-medium bg-purple-100 text-purple-700 px-2.5 py-0.5 rounded-full">LLC</span>
+                    </td>
+                    <td class="p-4">
+                        <span class="text-xs font-medium bg-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-full">Verification</span>
+                    </td>
+                    <td class="p-4 text-sm text-gray-500">2026-02-10</td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-20 bg-gray-200 rounded-full h-1.5">
+                                <div class="bg-indigo-500 h-1.5 rounded-full w-4/5"></div>
+                            </div>
+                            <span class="text-xs text-gray-500">80%</span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600">JD</div>
+                            <span class="text-sm text-gray-600">John Doe</span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <button title="View Details" class="text-gray-400 hover:text-blue-600 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 511.999 511.999">
+                                    <path d="M508.745 246.041c-4.574-6.257-113.557-153.206-252.748-153.206C127.513 92.835 18.573 239.784 14 246.041a19.995 19.995 0 0 0 0 19.917c4.573 6.257 113.557 153.206 252.997 153.206 139.44 0 248.425-146.949 252.997-153.206a19.998 19.998 0 0 0-.249-19.917zM255.997 379.164c-102.529 0-191.33-97.533-217.617-123.165C64.667 229.869 153.468 132.835 255.997 132.835c102.524 0 191.319 97.525 217.617 123.164-26.285 25.632-115.08 123.165-217.617 123.165z" />
+                                    <path d="M255.997 172.165c-46.215 0-83.833 37.618-83.833 83.833s37.618 83.833 83.833 83.833 83.833-37.618 83.833-83.833-37.618-83.833-83.833-83.833zm0 127.666c-24.291 0-43.833-19.542-43.833-43.833s19.542-43.833 43.833-43.833 43.833 19.542 43.833 43.833-19.542 43.833-43.833 43.833z" />
+                                </svg>
+                            </button>
+                            <button title="Verify Application" class="text-gray-400 hover:text-blue-600 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 348.882 348.882">
+                                    <path d="m333.988 11.758-.42-.383A43.363 43.363 0 0 0 304.258 0a43.579 43.579 0 0 0-32.104 14.153L116.803 184.231a14.993 14.993 0 0 0-3.154 5.37l-18.267 54.762c-2.112 6.331-1.052 13.333 2.835 18.729 3.918 5.438 10.23 8.685 16.886 8.685h.001c2.879 0 5.693-.592 8.362-1.76l52.89-23.138a14.985 14.985 0 0 0 5.063-3.626L336.771 73.176c16.166-17.697 14.919-45.247-2.783-61.418zM130.381 234.247l10.719-32.134.904-.99 20.316 18.556-.904.99-31.035 13.578zm184.24-181.304L182.553 197.53l-20.316-18.556L294.305 34.386c2.583-2.828 6.118-4.386 9.954-4.386 3.365 0 6.588 1.252 9.082 3.53l.419.383c5.484 5.009 5.87 13.546.861 19.03z" />
+                                    <path d="M303.85 138.388c-8.284 0-15 6.716-15 15v127.347c0 21.034-17.113 38.147-38.147 38.147H68.904c-21.035 0-38.147-17.113-38.147-38.147V100.413c0-21.034 17.113-38.147 38.147-38.147h131.587c8.284 0 15-6.716 15-15s-6.716-15-15-15H68.904C31.327 32.266.757 62.837.757 100.413v180.321c0 37.576 30.571 68.147 68.147 68.147h181.798c37.576 0 68.147-30.571 68.147-68.147V153.388c.001-8.284-6.715-15-14.999-15z" />
+                                </svg>
+                            </button>
+                            <button title="Delete Application" class="text-gray-400 hover:text-red-500 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z" />
+                                    <path d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+                @* Row 4 - Final Approval *@
+                <tr class="even:bg-blue-50 hover:bg-blue-50 transition-colors">
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-semibold flex-shrink-0">DS</div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">DataSpark GmbH</p>
+                                <p class="text-xs text-gray-400">Lena Müller (MD)</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div>
+                            <p class="text-sm text-gray-600">lena@dataspark.de</p>
+                            <p class="text-xs text-gray-400">+49 160 9876543</p>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <span class="text-xs font-medium bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full">Corporation</span>
+                    </td>
+                    <td class="p-4">
+                        <span class="text-xs font-medium bg-green-100 text-green-700 px-2.5 py-0.5 rounded-full">Final Approval</span>
+                    </td>
+                    <td class="p-4 text-sm text-gray-500">2026-03-30</td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-20 bg-gray-200 rounded-full h-1.5">
+                                <div class="bg-green-500 h-1.5 rounded-full w-11/12"></div>
+                            </div>
+                            <span class="text-xs text-gray-500">95%</span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600">JS</div>
+                            <span class="text-sm text-gray-600">Jane Smith</span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <button title="View Details" class="text-gray-400 hover:text-blue-600 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 511.999 511.999">
+                                    <path d="M508.745 246.041c-4.574-6.257-113.557-153.206-252.748-153.206C127.513 92.835 18.573 239.784 14 246.041a19.995 19.995 0 0 0 0 19.917c4.573 6.257 113.557 153.206 252.997 153.206 139.44 0 248.425-146.949 252.997-153.206a19.998 19.998 0 0 0-.249-19.917zM255.997 379.164c-102.529 0-191.33-97.533-217.617-123.165C64.667 229.869 153.468 132.835 255.997 132.835c102.524 0 191.319 97.525 217.617 123.164-26.285 25.632-115.08 123.165-217.617 123.165z" />
+                                    <path d="M255.997 172.165c-46.215 0-83.833 37.618-83.833 83.833s37.618 83.833 83.833 83.833 83.833-37.618 83.833-83.833-37.618-83.833-83.833-83.833zm0 127.666c-24.291 0-43.833-19.542-43.833-43.833s19.542-43.833 43.833-43.833 43.833 19.542 43.833 43.833-19.542 43.833-43.833 43.833z" />
+                                </svg>
+                            </button>
+                            <button title="Approve" class="text-gray-400 hover:text-green-600 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </button>
+                            <button title="Delete Application" class="text-gray-400 hover:text-red-500 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z" />
+                                    <path d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+                @* Row 5 - Completed *@
+                <tr class="even:bg-blue-50 hover:bg-blue-50 transition-colors">
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-xs font-semibold flex-shrink-0">SW</div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">Steelwerk Ltd</p>
+                                <p class="text-xs text-gray-400">Tom Barker (Owner)</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div>
+                            <p class="text-sm text-gray-600">tom@steelwerk.co.uk</p>
+                            <p class="text-xs text-gray-400">+44 7911 123456</p>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <span class="text-xs font-medium bg-gray-100 text-gray-600 px-2.5 py-0.5 rounded-full">Sole Prop.</span>
+                    </td>
+                    <td class="p-4">
+                        <span class="text-xs font-medium bg-green-100 text-green-700 px-2.5 py-0.5 rounded-full">Completed</span>
+                    </td>
+                    <td class="p-4 text-sm text-gray-500">2026-01-22</td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-20 bg-gray-200 rounded-full h-1.5">
+                                <div class="bg-green-500 h-1.5 rounded-full w-full"></div>
+                            </div>
+                            <span class="text-xs text-gray-500">100%</span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600">KM</div>
+                            <span class="text-sm text-gray-600">Kelwin Mark</span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <button title="View Details" class="text-gray-400 hover:text-blue-600 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 511.999 511.999">
+                                    <path d="M508.745 246.041c-4.574-6.257-113.557-153.206-252.748-153.206C127.513 92.835 18.573 239.784 14 246.041a19.995 19.995 0 0 0 0 19.917c4.573 6.257 113.557 153.206 252.997 153.206 139.44 0 248.425-146.949 252.997-153.206a19.998 19.998 0 0 0-.249-19.917zM255.997 379.164c-102.529 0-191.33-97.533-217.617-123.165C64.667 229.869 153.468 132.835 255.997 132.835c102.524 0 191.319 97.525 217.617 123.164-26.285 25.632-115.08 123.165-217.617 123.165z" />
+                                    <path d="M255.997 172.165c-46.215 0-83.833 37.618-83.833 83.833s37.618 83.833 83.833 83.833 83.833-37.618 83.833-83.833-37.618-83.833-83.833-83.833zm0 127.666c-24.291 0-43.833-19.542-43.833-43.833s19.542-43.833 43.833-43.833 43.833 19.542 43.833 43.833-19.542 43.833-43.833 43.833z" />
+                                </svg>
+                            </button>
+                            <button title="View Certificate" class="text-gray-400 hover:text-blue-600 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path d="M18 2c2.206 0 4 1.794 4 4v12c0 2.206-1.794 4-4 4H6c-2.206 0-4-1.794-4-4V6c0-2.206 1.794-4 4-4zm0-2H6a6 6 0 0 0-6 6v12a6 6 0 0 0 6 6h12a6 6 0 0 0 6-6V6a6 6 0 0 0-6-6z" />
+                                    <path d="M12 18a1 1 0 0 1-1-1V7a1 1 0 0 1 2 0v10a1 1 0 0 1-1 1z" />
+                                    <path d="M6 12a1 1 0 0 1 1-1h10a1 1 0 0 1 0 2H7a1 1 0 0 1-1-1z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+                @* Row 6 - Rejected *@
+                <tr class="even:bg-blue-50 hover:bg-blue-50 transition-colors">
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-red-100 text-red-700 flex items-center justify-center text-xs font-semibold flex-shrink-0">BC</div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-800">Brightline Co.</p>
+                                <p class="text-xs text-gray-400">Sara Malik (CEO)</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div>
+                            <p class="text-sm text-gray-600">sara@brightline.com</p>
+                            <p class="text-xs text-gray-400">+92 321 9876543</p>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <span class="text-xs font-medium bg-purple-100 text-purple-700 px-2.5 py-0.5 rounded-full">LLC</span>
+                    </td>
+                    <td class="p-4">
+                        <span class="text-xs font-medium bg-red-100 text-red-600 px-2.5 py-0.5 rounded-full">Rejected</span>
+                    </td>
+                    <td class="p-4 text-sm text-gray-500">2026-04-01</td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-20 bg-gray-200 rounded-full h-1.5">
+                                <div class="bg-red-400 h-1.5 rounded-full w-1/4"></div>
+                            </div>
+                            <span class="text-xs text-gray-500">25%</span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600">JS</div>
+                            <span class="text-sm text-gray-600">Jane Smith</span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <button title="View Details" class="text-gray-400 hover:text-blue-600 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 511.999 511.999">
+                                    <path d="M508.745 246.041c-4.574-6.257-113.557-153.206-252.748-153.206C127.513 92.835 18.573 239.784 14 246.041a19.995 19.995 0 0 0 0 19.917c4.573 6.257 113.557 153.206 252.997 153.206 139.44 0 248.425-146.949 252.997-153.206a19.998 19.998 0 0 0-.249-19.917zM255.997 379.164c-102.529 0-191.33-97.533-217.617-123.165C64.667 229.869 153.468 132.835 255.997 132.835c102.524 0 191.319 97.525 217.617 123.164-26.285 25.632-115.08 123.165-217.617 123.165z" />
+                                    <path d="M255.997 172.165c-46.215 0-83.833 37.618-83.833 83.833s37.618 83.833 83.833 83.833 83.833-37.618 83.833-83.833-37.618-83.833-83.833-83.833zm0 127.666c-24.291 0-43.833-19.542-43.833-43.833s19.542-43.833 43.833-43.833 43.833 19.542 43.833 43.833-19.542 43.833-43.833 43.833z" />
+                                </svg>
+                            </button>
+                            <button title="Reapply" class="text-gray-400 hover:text-blue-600 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path d="M18 2c2.206 0 4 1.794 4 4v12c0 2.206-1.794 4-4 4H6c-2.206 0-4-1.794-4-4V6c0-2.206 1.794-4 4-4zm0-2H6a6 6 0 0 0-6 6v12a6 6 0 0 0 6 6h12a6 6 0 0 0 6-6V6a6 6 0 0 0-6-6z" />
+                                    <path d="M12 18a1 1 0 0 1-1-1V7a1 1 0 0 1 2 0v10a1 1 0 0 1-1 1z" />
+                                    <path d="M6 12a1 1 0 0 1 1-1h10a1 1 0 0 1 0 2H7a1 1 0 0 1-1-1z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    @* ── Pagination ── *@
+    <div class="flex flex-wrap items-center justify-between gap-4 px-5 py-4 border-t border-gray-100">
+        <p class="text-sm text-gray-500">Showing <span class="font-medium text-gray-700">1–6</span> of <span class="font-medium text-gray-700">105</span> applications</p>
+        <div class="flex items-center gap-1">
+            <button class="px-3 py-1.5 text-sm text-gray-500 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 transition-colors" disabled>Previous</button>
+            <button class="px-3 py-1.5 text-sm bg-blue-600 text-white border border-blue-600 rounded-lg">1</button>
+            <button class="px-3 py-1.5 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">2</button>
+            <button class="px-3 py-1.5 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">3</button>
+            <span class="px-2 text-gray-400 text-sm">...</span>
+            <button class="px-3 py-1.5 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">18</button>
+            <button class="px-3 py-1.5 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">Next</button>
+        </div>
+    </div>
+</div>

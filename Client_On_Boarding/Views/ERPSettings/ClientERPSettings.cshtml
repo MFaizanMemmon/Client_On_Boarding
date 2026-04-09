@@ -1,0 +1,633 @@
+﻿@{
+    ViewData["Title"] = "ERP Settings";
+}
+
+@* ── Page Header ── *@
+<div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+    <div>
+        <div class="flex items-center gap-2 text-sm text-gray-400 mb-1">
+            <a href="javascript:void(0)" class="hover:text-blue-600 transition-colors">Dashboard</a>
+            <span>/</span>
+            <a href="javascript:void(0)" class="hover:text-blue-600 transition-colors">General Settings</a>
+            <span>/</span>
+            <span class="text-gray-600">ERP Settings</span>
+        </div>
+        <h1 class="text-2xl font-semibold text-gray-800">ERP Settings</h1>
+        <p class="text-sm text-gray-500 mt-0.5">Configure ERP preferences per client</p>
+    </div>
+    <div class="flex items-center gap-3">
+        <button type="button" onclick="resetForm()"
+                class="text-sm text-gray-600 border border-gray-200 rounded-lg px-4 py-2.5 hover:bg-gray-50 transition-colors">
+            Reset to Defaults
+        </button>
+        <button type="submit" form="erpSettingsForm"
+                class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-white" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+            </svg>
+            Save Settings
+        </button>
+    </div>
+</div>
+
+@* ── Success Alert ── *@
+<div id="savedAlert" class="hidden mb-5 flex items-center gap-3 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-green-600 flex-shrink-0" viewBox="0 0 24 24">
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+    </svg>
+    <span id="savedAlertText">ERP settings saved successfully for this client.</span>
+</div>
+
+@* ── Client Selector Bar ── *@
+<div class="bg-white border border-gray-200 rounded-xl px-6 py-4 mb-6">
+    <div class="flex flex-wrap items-center gap-4">
+        <div class="flex-1 min-w-[220px]">
+            <label class="block text-xs font-medium text-gray-500 mb-1.5">Select Client</label>
+            <select id="clientSelect" onchange="loadClientSettings(this)"
+                    class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all text-gray-700">
+                <option value="">— Choose a client —</option>
+                <option value="1" data-name="Ahmed Raza" data-company="Nexova Ltd" data-plan="Professional" data-status="Active" data-since="2026-01-15">Ahmed Raza — Nexova Ltd</option>
+                <option value="2" data-name="Sara Malik" data-company="Brightline Co." data-plan="Starter" data-status="Onboarding" data-since="2026-03-01">Sara Malik — Brightline Co.</option>
+                <option value="3" data-name="David Osei" data-company="Apexion Inc." data-plan="Enterprise" data-status="Active" data-since="2025-11-10">David Osei — Apexion Inc.</option>
+                <option value="4" data-name="Priya Nair" data-company="Cloudform Pvt." data-plan="Professional" data-status="Active" data-since="2026-02-20">Priya Nair — Cloudform Pvt.</option>
+                <option value="5" data-name="Lena Müller" data-company="DataSpark GmbH" data-plan="Starter" data-status="Trial" data-since="2026-04-01">Lena Müller — DataSpark GmbH</option>
+            </select>
+        </div>
+
+        @* Client info card — shown after selection *@
+        <div id="clientInfoCard" class="hidden flex-1 min-w-[260px] bg-blue-50 border border-blue-100 rounded-xl px-4 py-3">
+            <div class="flex items-center gap-3">
+                <div id="clientAvatar" class="w-10 h-10 rounded-full bg-blue-200 text-blue-700 flex items-center justify-center text-sm font-bold flex-shrink-0">--</div>
+                <div class="flex-1 min-w-0">
+                    <p id="clientCardName" class="text-sm font-semibold text-gray-800 truncate">—</p>
+                    <p id="clientCardCompany" class="text-xs text-gray-500 truncate">—</p>
+                </div>
+                <div class="text-right flex-shrink-0">
+                    <span id="clientCardPlan" class="inline-block text-xs font-medium bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">—</span>
+                    <p id="clientCardSince" class="text-xs text-gray-400 mt-1">—</p>
+                </div>
+                <span id="clientStatusSpan" class="text-xs font-medium px-2.5 py-1 rounded-full bg-green-100 text-green-700 flex-shrink-0">—</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* ── Placeholder (no client chosen) ── *@
+<div id="noClientPlaceholder" class="bg-white border border-dashed border-gray-300 rounded-xl py-16 flex flex-col items-center justify-center text-center">
+    <div class="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-gray-400" viewBox="0 0 512 512">
+            <path d="M437.02 74.98C388.668 26.63 324.379 0 256 0S123.332 26.629 74.98 74.98C26.63 123.332 0 187.621 0 256s26.629 132.668 74.98 181.02C123.332 485.37 187.621 512 256 512s132.668-26.629 181.02-74.98C485.37 388.668 512 324.379 512 256s-26.629-132.668-74.98-181.02zM256 269.507c-42.871 0-77.754-34.882-77.754-77.753C178.246 148.879 213.13 114 256 114s77.754 34.879 77.754 77.754c0 42.871-34.883 77.754-77.754 77.754z" />
+        </svg>
+    </div>
+    <p class="text-sm font-medium text-gray-600 mb-1">No client selected</p>
+    <p class="text-xs text-gray-400">Select a client above to configure their ERP settings</p>
+</div>
+
+@* ── Settings Form (shown after client selected) ── *@
+<form id="erpSettingsForm" method="post" class="hidden">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="ClientId" id="hiddenClientId" />
+
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+        @* ══ LEFT + CENTRE ══ *@
+        <div class="xl:col-span-2 space-y-6">
+
+            @* 1. Localisation *@
+            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gray-50">
+                    <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-blue-600" viewBox="0 0 512 512">
+                            <path d="M256 0C114.618 0 0 114.618 0 256s114.618 256 256 256 256-114.618 256-256S397.382 0 256 0zm0 480C132.897 480 32 379.103 32 256S132.897 32 256 32s224 100.897 224 224-100.897 224-224 224z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-sm font-semibold text-gray-700">Localisation</h2>
+                </div>
+                <div class="px-6 py-5 space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Language</label>
+                            <select name="Language" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all text-gray-600">
+                                <option value="en" selected>English</option>
+                                <option value="ur">Urdu — اردو</option>
+                                <option value="ar">Arabic — العربية</option>
+                                <option value="fr">French — Français</option>
+                                <option value="de">German — Deutsch</option>
+                                <option value="es">Spanish — Español</option>
+                                <option value="zh">Chinese — 中文</option>
+                                <option value="hi">Hindi — हिन्दी</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Timezone</label>
+                            <select name="Timezone" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all text-gray-600">
+                                <option value="PKT" selected>PKT — Asia/Karachi (UTC+5)</option>
+                                <option value="UTC">UTC — Coordinated Universal Time</option>
+                                <option value="AST">AST — Arabia Standard (UTC+3)</option>
+                                <option value="GST">GST — Gulf Standard (UTC+4)</option>
+                                <option value="IST">IST — India Standard (UTC+5:30)</option>
+                                <option value="BST">BST — British Summer (UTC+1)</option>
+                                <option value="EST">EST — Eastern Standard (UTC-5)</option>
+                                <option value="PST">PST — Pacific Standard (UTC-8)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Date Format</label>
+                            <select name="DateFormat" onchange="updatePreviews()" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all text-gray-600">
+                                <option value="DD/MM/YYYY" selected>DD/MM/YYYY — 05/04/2026</option>
+                                <option value="MM/DD/YYYY">MM/DD/YYYY — 04/05/2026</option>
+                                <option value="YYYY-MM-DD">YYYY-MM-DD — 2026-04-05</option>
+                                <option value="DD-MM-YYYY">DD-MM-YYYY — 05-04-2026</option>
+                                <option value="DD MMM YYYY">DD MMM YYYY — 05 Apr 2026</option>
+                                <option value="MMMM D YYYY">MMMM D, YYYY — April 5, 2026</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Time Format</label>
+                            <div class="flex gap-2">
+                                <label class="flex-1">
+                                    <input type="radio" name="TimeFormat" value="12h" class="peer hidden" checked onchange="updatePreviews()" />
+                                    <span class="block text-center text-xs font-medium border border-gray-200 rounded-lg py-2.5 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-700 hover:bg-gray-50 transition-all">12-Hour</span>
+                                </label>
+                                <label class="flex-1">
+                                    <input type="radio" name="TimeFormat" value="24h" class="peer hidden" onchange="updatePreviews()" />
+                                    <span class="block text-center text-xs font-medium border border-gray-200 rounded-lg py-2.5 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-700 hover:bg-gray-50 transition-all">24-Hour</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-2">First Day of Week</label>
+                        <div class="flex flex-wrap gap-2">
+                            @{
+                                var days = new[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+                            }
+                            @for (int i = 0; i < days.Length; i++)
+                            {
+                                <label>
+                                    <input type="radio" name="FirstDayOfWeek" value="@i" class="peer hidden" @(i == 1 ? "checked" : "") />
+                                    <span class="block text-xs font-medium border border-gray-200 rounded-lg px-3 py-2 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-700 hover:bg-gray-50 transition-all">@days[i]</span>
+                                </label>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* 2. Currency & Numbers *@
+            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gray-50">
+                    <div class="w-7 h-7 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-green-600" viewBox="0 0 24 24">
+                            <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-sm font-semibold text-gray-700">Currency & Numbers</h2>
+                </div>
+                <div class="px-6 py-5 space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Default Currency</label>
+                            <select name="Currency" onchange="updatePreviews()" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all text-gray-600">
+                                <option value="PKR" selected>PKR — Pakistani Rupee (₨)</option>
+                                <option value="USD">USD — US Dollar ($)</option>
+                                <option value="EUR">EUR — Euro (€)</option>
+                                <option value="GBP">GBP — British Pound (£)</option>
+                                <option value="AED">AED — UAE Dirham (د.إ)</option>
+                                <option value="SAR">SAR — Saudi Riyal (﷼)</option>
+                                <option value="INR">INR — Indian Rupee (₹)</option>
+                                <option value="CAD">CAD — Canadian Dollar (CA$)</option>
+                                <option value="AUD">AUD — Australian Dollar (A$)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Symbol Position</label>
+                            <div class="flex gap-2">
+                                <label class="flex-1">
+                                    <input type="radio" name="CurrencyPosition" value="before" class="peer hidden" checked onchange="updatePreviews()" />
+                                    <span class="block text-center text-xs font-medium border border-gray-200 rounded-lg py-2.5 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-700 hover:bg-gray-50 transition-all">₨ Before</span>
+                                </label>
+                                <label class="flex-1">
+                                    <input type="radio" name="CurrencyPosition" value="after" class="peer hidden" onchange="updatePreviews()" />
+                                    <span class="block text-center text-xs font-medium border border-gray-200 rounded-lg py-2.5 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-700 hover:bg-gray-50 transition-all">After ₨</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Decimal Places</label>
+                            <select name="DecimalPlaces" onchange="updatePreviews()" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 transition-all text-gray-600">
+                                <option value="0">0 — 1,500</option>
+                                <option value="2" selected>2 — 1,500.00</option>
+                                <option value="3">3 — 1,500.000</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Thousands Separator</label>
+                            <select name="ThousandsSep" onchange="updatePreviews()" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 transition-all text-gray-600">
+                                <option value="comma" selected>Comma — 1,000</option>
+                                <option value="dot">Dot — 1.000</option>
+                                <option value="space">Space — 1 000</option>
+                                <option value="none">None — 1000</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Decimal Separator</label>
+                            <select name="DecimalSep" onchange="updatePreviews()" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 transition-all text-gray-600">
+                                <option value="dot" selected>Dot — 1,500.00</option>
+                                <option value="comma">Comma — 1.500,00</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 flex items-center justify-between">
+                        <span class="text-xs text-gray-500">Amount preview</span>
+                        <span class="text-sm font-semibold text-gray-800" id="currencyPreview">₨ 1,500.00</span>
+                    </div>
+                </div>
+            </div>
+
+            @* 3. Inventory & Stock *@
+            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gray-50">
+                    <div class="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-amber-600" viewBox="0 0 24 24">
+                            <path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16zM6 10h2v2H6zm0 4h2v2H6zm4-4h2v2h-2zm0 4h2v2h-2zm4-4h2v2h-2zm0 4h2v2h-2z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-sm font-semibold text-gray-700">Inventory & Stock Control</h2>
+                </div>
+                <div class="px-6 py-5 space-y-4">
+
+                    @* Stock Lock — featured toggle *@
+                    <div class="flex items-start justify-between gap-4 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                        <div>
+                            <div class="flex items-center gap-2 mb-0.5">
+                                <p class="text-sm font-semibold text-gray-800">Stock Lock</p>
+                                <span class="text-xs bg-amber-100 text-amber-700 font-medium px-2 py-0.5 rounded-full">Recommended</span>
+                            </div>
+                            <p class="text-xs text-gray-500">Block sales when stock hits zero. Prevents negative inventory on invoices.</p>
+                        </div>
+                        <div class="relative flex-shrink-0 mt-1">
+                            <input type="checkbox" name="StockLock" id="stockLockToggle" class="sr-only peer" checked />
+                            <label for="stockLockToggle" class="block w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600 transition-colors cursor-pointer"></label>
+                            <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5 pointer-events-none"></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Valuation Method</label>
+                            <select name="InventoryMethod" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 transition-all text-gray-600">
+                                <option value="FIFO" selected>FIFO — First In, First Out</option>
+                                <option value="LIFO">LIFO — Last In, First Out</option>
+                                <option value="AVG">Average Cost</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Low Stock Alert Threshold</label>
+                            <div class="relative">
+                                <input type="number" name="LowStockThreshold" value="10" min="0"
+                                       class="w-full text-sm border border-gray-200 rounded-lg px-3 pr-12 py-2.5 outline-none focus:border-blue-400 transition-all" />
+                                <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-xs text-gray-400 pointer-events-none">units</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        @{
+                            var stockToggles = new[] {
+                                new { Id="negWarn",     Name="NegativeStockWarning", Label="Negative Stock Warning",  Desc="Warn before stock runs out",    Checked=true  },
+                                new { Id="autoReorder", Name="AutoReorder",          Label="Auto Reorder",            Desc="Create PO at threshold",        Checked=false },
+                                new { Id="serialTrack", Name="SerialTracking",       Label="Serial / Batch Tracking", Desc="Enable lot tracking",           Checked=true  },
+                                new { Id="multiWh",     Name="MultiWarehouse",       Label="Multi-Warehouse",         Desc="Track across locations",        Checked=false },
+                            };
+                        }
+                        @foreach (var t in stockToggles)
+                        {
+                            <div class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700">@t.Label</p>
+                                    <p class="text-xs text-gray-400">@t.Desc</p>
+                                </div>
+                                <div class="relative flex-shrink-0">
+                                    <input type="checkbox" name="@t.Name" id="@t.Id" class="sr-only peer" @(t.Checked ? "checked" : "") />
+                                    <label for="@t.Id" class="block w-10 h-5 bg-gray-200 rounded-full peer-checked:bg-blue-600 transition-colors cursor-pointer"></label>
+                                    <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5 pointer-events-none"></div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            @* 4. Sales & Tax *@
+            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gray-50">
+                    <div class="w-7 h-7 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-purple-600" viewBox="0 0 24 24">
+                            <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-sm font-semibold text-gray-700">Sales & Tax</h2>
+                </div>
+                <div class="px-6 py-5 space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Default Tax Rate (%)</label>
+                            <div class="relative">
+                                <input type="number" name="DefaultTaxRate" value="17" min="0" max="100" step="0.5"
+                                       class="w-full text-sm border border-gray-200 rounded-lg px-3 pr-8 py-2.5 outline-none focus:border-blue-400 transition-all" />
+                                <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-xs text-gray-400 pointer-events-none">%</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Tax Label</label>
+                            <input type="text" name="TaxLabel" value="GST" placeholder="e.g. VAT, GST, Tax"
+                                   class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 transition-all placeholder-gray-400" />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        @{
+                            var salesToggles = new[] {
+                                new { Id="taxInc",    Name="TaxInclusive",   Label="Tax Inclusive Pricing", Desc="Prices already include tax",    Checked=false },
+                                new { Id="discounts", Name="AllowDiscounts", Label="Allow Discounts",       Desc="Enable discounts on invoices",  Checked=true  },
+                            };
+                        }
+                        @foreach (var t in salesToggles)
+                        {
+                            <div class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-700">@t.Label</p>
+                                    <p class="text-xs text-gray-400">@t.Desc</p>
+                                </div>
+                                <div class="relative flex-shrink-0">
+                                    <input type="checkbox" name="@t.Name" id="@t.Id" class="sr-only peer" @(t.Checked ? "checked" : "") />
+                                    <label for="@t.Id" class="block w-10 h-5 bg-gray-200 rounded-full peer-checked:bg-blue-600 transition-colors cursor-pointer"></label>
+                                    <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5 pointer-events-none"></div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1.5">Invoice Prefix</label>
+                        <div class="flex flex-wrap gap-3 items-center">
+                            <input type="text" name="InvoicePrefix" id="invoicePrefix" value="INV-"
+                                   oninput="document.getElementById('invoicePreviewText').textContent = this.value + '00001'"
+                                   class="w-28 text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 transition-all" />
+                            <div class="flex items-center px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-500">
+                                Preview: <span id="invoicePreviewText" class="font-semibold text-gray-700 ml-1">INV-00001</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        @* ══ RIGHT COLUMN ══ *@
+        <div class="space-y-6">
+
+            @* System Behaviour *@
+            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div class="px-5 py-4 border-b border-gray-100 bg-gray-50">
+                    <h2 class="text-sm font-semibold text-gray-700">System Behaviour</h2>
+                </div>
+                <div class="px-5 py-5 space-y-0">
+                    @{
+                        var sysBehaviours = new[] {
+                            new { Id="multiBranch", Name="MultiBranch",        Label="Multi-Branch Mode",       Desc="Multiple branches / locations",  Checked=true  },
+                            new { Id="fiscalLock",  Name="FiscalYearLock",     Label="Fiscal Year Lock",        Desc="Lock entries in closed periods", Checked=true  },
+                            new { Id="auditLog",    Name="AuditLog",           Label="Audit Log",               Desc="Track all user actions",         Checked=true  },
+                            new { Id="poApproval",  Name="PoApproval",         Label="PO Approval Required",    Desc="Manager sign-off on orders",     Checked=false },
+                            new { Id="emailNotif",  Name="EmailNotifications", Label="Email Notifications",     Desc="System alerts via email",        Checked=true  },
+                        };
+                    }
+                    @for (int i = 0; i < sysBehaviours.Length; i++)
+                    {
+                        var t = sysBehaviours[i];
+                        <div class="flex items-center justify-between gap-3 py-3 @(i > 0 ? "border-t border-gray-100" : "")">
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">@t.Label</p>
+                                <p class="text-xs text-gray-400 mt-0.5">@t.Desc</p>
+                            </div>
+                            <div class="relative flex-shrink-0">
+                                <input type="checkbox" name="@t.Name" id="@t.Id" class="sr-only peer" @(t.Checked ? "checked" : "") />
+                                <label for="@t.Id" class="block w-10 h-5 bg-gray-200 rounded-full peer-checked:bg-blue-600 transition-colors cursor-pointer"></label>
+                                <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5 pointer-events-none"></div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @* Fiscal Year *@
+            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div class="px-5 py-4 border-b border-gray-100 bg-gray-50">
+                    <h2 class="text-sm font-semibold text-gray-700">Fiscal Year</h2>
+                </div>
+                <div class="px-5 py-5 space-y-3">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1.5">Start Month</label>
+                        <select name="FiscalYearStart" id="fiscalStart" onchange="updateFiscalEnd()"
+                                class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 transition-all text-gray-600">
+                            <option value="1">January</option>
+                            <option value="4">April</option>
+                            <option value="7" selected>July</option>
+                            <option value="10">October</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1.5">End Month</label>
+                        <div class="text-sm text-gray-500 border border-gray-200 rounded-lg px-3 py-2.5 bg-gray-50" id="fiscalYearEnd">
+                            June (auto-calculated)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* Format Preview *@
+            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div class="px-5 py-4 border-b border-gray-100 bg-gray-50">
+                    <h2 class="text-sm font-semibold text-gray-700">Format Preview</h2>
+                </div>
+                <div class="px-5 py-5 space-y-2.5 text-sm">
+                    <div class="flex justify-between"><span class="text-gray-400">Date</span><span class="font-medium text-gray-800" id="previewDate">05/04/2026</span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Time</span><span class="font-medium text-gray-800" id="previewTime">02:30 PM</span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Amount</span><span class="font-medium text-gray-800" id="previewAmount">₨ 1,500.00</span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Invoice No.</span><span class="font-medium text-gray-800" id="previewInvoice">INV-00001</span></div>
+                </div>
+            </div>
+
+            @* Sidebar save *@
+            <div class="bg-white border border-gray-200 rounded-xl px-5 py-4 flex gap-3">
+                <button type="button" onclick="resetForm()"
+                        class="flex-1 text-center text-sm text-gray-600 border border-gray-200 rounded-lg px-4 py-2.5 hover:bg-gray-50 transition-colors">
+                    Reset
+                </button>
+                <button type="submit" form="erpSettingsForm"
+                        class="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
+                    Save
+                </button>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const avatarColors = [
+                { bg:'bg-blue-100',   text:'text-blue-700'   },
+                { bg:'bg-green-100',  text:'text-green-700'  },
+                { bg:'bg-purple-100', text:'text-purple-700' },
+                { bg:'bg-pink-100',   text:'text-pink-700'   },
+                { bg:'bg-amber-100',  text:'text-amber-700'  },
+            ];
+            const planColors = {
+                'Starter':      'bg-gray-100 text-gray-600',
+                'Professional': 'bg-blue-100 text-blue-700',
+                'Enterprise':   'bg-purple-100 text-purple-700',
+            };
+            const statusColors = {
+                'Active':     'bg-green-100 text-green-700',
+                'Onboarding': 'bg-blue-100 text-blue-700',
+                'Trial':      'bg-amber-100 text-amber-700',
+                'Inactive':   'bg-red-100 text-red-600',
+            };
+
+            // ── Client load ──────────────────────────────────────────────
+            window.loadClientSettings = function (select) {
+                const opt         = select.options[select.selectedIndex];
+                const placeholder = document.getElementById('noClientPlaceholder');
+                const form        = document.getElementById('erpSettingsForm');
+                const infoCard    = document.getElementById('clientInfoCard');
+
+                if (!opt.value) {
+                    placeholder.classList.remove('hidden');
+                    form.classList.add('hidden');
+                    infoCard.classList.add('hidden');
+                    return;
+                }
+
+                placeholder.classList.add('hidden');
+                form.classList.remove('hidden');
+                infoCard.classList.remove('hidden');
+                document.getElementById('hiddenClientId').value = opt.value;
+
+                const name    = opt.dataset.name    || opt.text.split('—')[0].trim();
+                const company = opt.dataset.company || '';
+                const plan    = opt.dataset.plan    || 'Starter';
+                const status  = opt.dataset.status  || 'Active';
+                const since   = opt.dataset.since   || '';
+                const idx     = (parseInt(opt.value) - 1) % avatarColors.length;
+                const color   = avatarColors[idx];
+                const parts   = name.trim().split(' ');
+                const initials= (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
+
+                const avatar = document.getElementById('clientAvatar');
+                avatar.textContent = initials;
+                avatar.className   = `w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 ${color.bg} ${color.text}`;
+
+                document.getElementById('clientCardName').textContent    = name;
+                document.getElementById('clientCardCompany').textContent = company;
+
+                const planBadge = document.getElementById('clientCardPlan');
+                planBadge.textContent = plan;
+                planBadge.className   = `inline-block text-xs font-medium px-2 py-0.5 rounded-full ${planColors[plan] || 'bg-gray-100 text-gray-600'}`;
+
+                if (since) {
+                    const d = new Date(since);
+                    document.getElementById('clientCardSince').textContent = 'Since ' + d.toLocaleDateString('en-GB', { month:'short', year:'numeric' });
+                }
+
+                const statusSpan = document.getElementById('clientStatusSpan');
+                statusSpan.textContent = status;
+                statusSpan.className   = `text-xs font-medium px-2.5 py-1 rounded-full flex-shrink-0 ${statusColors[status] || 'bg-gray-100 text-gray-600'}`;
+
+                // Auto invoice prefix from company
+                const compInit = company.split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0,3);
+                const pfx = compInit + '-';
+                const pfxEl = document.querySelector('[name="InvoicePrefix"]');
+                if (pfxEl) { pfxEl.value = pfx; }
+                document.getElementById('invoicePreviewText').textContent = pfx + '00001';
+                document.getElementById('previewInvoice').textContent     = pfx + '00001';
+
+                updatePreviews();
+            };
+
+            // ── Fiscal end ───────────────────────────────────────────────
+            const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            window.updateFiscalEnd = function () {
+                const start = parseInt(document.getElementById('fiscalStart').value);
+                document.getElementById('fiscalYearEnd').textContent = months[(start + 10) % 12] + ' (auto-calculated)';
+            };
+
+            // ── Format previews ──────────────────────────────────────────
+            const currencySymbols = { PKR:'₨', USD:'$', EUR:'€', GBP:'£', AED:'د.إ', SAR:'﷼', INR:'₹', CAD:'CA$', AUD:'A$' };
+
+            window.updatePreviews = function () {
+                const currency  = document.querySelector('[name="Currency"]')?.value || 'PKR';
+                const position  = document.querySelector('[name="CurrencyPosition"]:checked')?.value || 'before';
+                const decimals  = parseInt(document.querySelector('[name="DecimalPlaces"]')?.value || '2');
+                const symbol    = currencySymbols[currency] || currency;
+                const amount    = (1500).toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                const formatted = position === 'before' ? `${symbol} ${amount}` : `${amount} ${symbol}`;
+
+                ['currencyPreview','previewAmount'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = formatted;
+                });
+
+                const fmt = document.querySelector('[name="DateFormat"]')?.value || 'DD/MM/YYYY';
+                const now = new Date(2026,3,5);
+                const d   = String(now.getDate()).padStart(2,'0');
+                const m   = String(now.getMonth()+1).padStart(2,'0');
+                const y   = now.getFullYear();
+                const sm  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                const lm  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+                const dateMap = {
+                    'DD/MM/YYYY':  `${d}/${m}/${y}`,
+                    'MM/DD/YYYY':  `${m}/${d}/${y}`,
+                    'YYYY-MM-DD':  `${y}-${m}-${d}`,
+                    'DD-MM-YYYY':  `${d}-${m}-${y}`,
+                    'DD MMM YYYY': `${d} ${sm[now.getMonth()]} ${y}`,
+                    'MMMM D YYYY': `${lm[now.getMonth()]} ${now.getDate()}, ${y}`,
+                };
+                const pdEl = document.getElementById('previewDate');
+                if (pdEl) pdEl.textContent = dateMap[fmt] || `${d}/${m}/${y}`;
+
+                const tf   = document.querySelector('[name="TimeFormat"]:checked')?.value || '12h';
+                const ptEl = document.getElementById('previewTime');
+                if (ptEl) ptEl.textContent = tf === '12h' ? '02:30 PM' : '14:30';
+            };
+
+            // ── Form submit ──────────────────────────────────────────────
+            document.getElementById('erpSettingsForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const clientName = document.getElementById('clientCardName')?.textContent || 'this client';
+                const alert = document.getElementById('savedAlert');
+                document.getElementById('savedAlertText').textContent = `ERP settings saved successfully for ${clientName}.`;
+                alert.classList.remove('hidden');
+                setTimeout(() => alert.classList.add('hidden'), 4000);
+                window.scrollTo({ top:0, behavior:'smooth' });
+            });
+
+            // ── Reset ────────────────────────────────────────────────────
+            window.resetForm = function () {
+                if (confirm('Reset all settings to default values?')) {
+                    document.getElementById('erpSettingsForm').reset();
+                    updatePreviews();
+                    updateFiscalEnd();
+                }
+            };
+
+            updateFiscalEnd();
+        });
+    </script>
+}

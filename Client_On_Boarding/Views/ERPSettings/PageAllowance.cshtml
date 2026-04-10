@@ -6,10 +6,10 @@
 <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
     <div>
         <div class="flex items-center gap-2 text-sm text-gray-400 mb-1">
-            <a href="javascript:void(0)" class="hover:text-blue-600 transition-colors">Dashboard</a>
+            <a asp-action="Index" asp-controller="Home" class="hover:text-blue-600 transition-colors">Dashboard</a>
             <span>/</span>
-            <a href="javascript:void(0)" class="hover:text-blue-600 transition-colors">General Settings</a>
-            <span>/</span>
+          
+      
             <span class="text-gray-600">Page Allowances</span>
         </div>
         <h1 class="text-2xl font-semibold text-gray-800">Page Allowances</h1>
@@ -59,36 +59,11 @@
                         <option value="4">DataSpark GmbH (Lena Müller)</option>
                         <option value="5">Brightline Co. (Sara Malik)</option>
                     </select>
-                    
-                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Or Select Tier Template</label>
-                    <select id="tierSelect" name="TierId" onchange="loadTierAllowances()"
-                            class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 transition-all">
-                        <option value="">Select a tier template</option>
-                        <option value="basic">Basic Plan</option>
-                        <option value="professional">Professional Plan</option>
-                        <option value="enterprise">Enterprise Plan</option>
-                        <option value="custom">Custom Configuration</option>
-                    </select>
+                 
                 </div>
             </div>
 
-            @* Summary Card *@
-            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-5">
-                <div class="flex items-center justify-between mb-3">
-                    <p class="text-xs font-semibold text-blue-700 uppercase tracking-wide">Allowance Summary</p>
-                    <span id="pageCount" class="text-2xl font-bold text-blue-700">0</span>
-                </div>
-                <p class="text-sm text-gray-600">pages selected</p>
-                <div class="mt-3 pt-3 border-t border-blue-100">
-                    <div class="flex justify-between text-xs text-gray-500 mb-1">
-                        <span>Storage Used</span>
-                        <span id="storageUsed">0 MB</span>
-                    </div>
-                    <div class="w-full bg-blue-200 rounded-full h-1.5">
-                        <div id="storageBar" class="bg-blue-600 h-1.5 rounded-full" style="width: 0%"></div>
-                    </div>
-                </div>
-            </div>
+           
 
             @* Quick Actions *@
             <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
@@ -104,247 +79,14 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14H7v-2h3v2zm0-4H7v-2h3v2zm0-4H7V7h3v2z" /></svg>
                         Deselect All Pages
                     </button>
-                    <button type="button" onclick="loadBasicPlan()" class="w-full text-left text-sm text-gray-600 hover:text-blue-600 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z" /></svg>
-                        Apply Basic Plan
-                    </button>
-                    <button type="button" onclick="loadProfessionalPlan()" class="w-full text-left text-sm text-gray-600 hover:text-blue-600 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z" /></svg>
-                        Apply Professional Plan
-                    </button>
-                    <button type="button" onclick="loadEnterprisePlan()" class="w-full text-left text-sm text-gray-600 hover:text-blue-600 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z" /></svg>
-                        Apply Enterprise Plan
-                    </button>
+                   
                 </div>
             </div>
         </div>
 
         @* ── RIGHT COLUMN (Page Allowances Grid) ── *@
         <div class="xl:col-span-2 space-y-6">
-
-            @* Dashboard & Analytics Section *@
-            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50">
-                    <div class="flex items-center gap-3">
-                        <div class="w-7 h-7 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-indigo-600" viewBox="0 0 24 24">
-                                <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
-                            </svg>
-                        </div>
-                        <h2 class="text-sm font-semibold text-gray-700">Dashboard & Analytics</h2>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs text-gray-400">Select all</span>
-                        <input type="checkbox" id="selectAllDashboard" onchange="toggleSection('dashboard', this.checked)" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                    </div>
-                </div>
-                <div class="px-5 py-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="dashboard_overview" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="dashboard" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Dashboard Overview</p>
-                                <p class="text-xs text-gray-400">Main dashboard with KPIs</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="analytics_reports" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="dashboard" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Analytics Reports</p>
-                                <p class="text-xs text-gray-400">Advanced analytics and insights</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="custom_reports" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="dashboard" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Custom Reports</p>
-                                <p class="text-xs text-gray-400">Build custom report builder</p>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            @* Sales & CRM Section *@
-            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50">
-                    <div class="flex items-center gap-3">
-                        <div class="w-7 h-7 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-green-600" viewBox="0 0 24 24">
-                                <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z" />
-                            </svg>
-                        </div>
-                        <h2 class="text-sm font-semibold text-gray-700">Sales & CRM</h2>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs text-gray-400">Select all</span>
-                        <input type="checkbox" id="selectAllSales" onchange="toggleSection('sales', this.checked)" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                    </div>
-                </div>
-                <div class="px-5 py-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="leads_management" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="sales" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Leads Management</p>
-                                <p class="text-xs text-gray-400">Track and manage client leads</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="opportunities" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="sales" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Opportunities</p>
-                                <p class="text-xs text-gray-400">Sales pipeline management</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="quotations" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="sales" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Quotations</p>
-                                <p class="text-xs text-gray-400">Create and send quotes</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="invoices" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="sales" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Invoices</p>
-                                <p class="text-xs text-gray-400">Invoice management</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="payments" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="sales" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Payments</p>
-                                <p class="text-xs text-gray-400">Payment tracking</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="contracts" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="sales" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Contracts</p>
-                                <p class="text-xs text-gray-400">Contract management</p>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            @* Inventory & Products Section *@
-            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50">
-                    <div class="flex items-center gap-3">
-                        <div class="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-amber-600" viewBox="0 0 24 24">
-                                <path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM10 4h4v2h-4V4z" />
-                            </svg>
-                        </div>
-                        <h2 class="text-sm font-semibold text-gray-700">Inventory & Products</h2>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs text-gray-400">Select all</span>
-                        <input type="checkbox" id="selectAllInventory" onchange="toggleSection('inventory', this.checked)" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                    </div>
-                </div>
-                <div class="px-5 py-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="products" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="inventory" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Products</p>
-                                <p class="text-xs text-gray-400">Product catalog management</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="stock_management" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="inventory" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Stock Management</p>
-                                <p class="text-xs text-gray-400">Inventory tracking</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="purchase_orders" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="inventory" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Purchase Orders</p>
-                                <p class="text-xs text-gray-400">Manage supplier orders</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="suppliers" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="inventory" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Suppliers</p>
-                                <p class="text-xs text-gray-400">Vendor management</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="warehouse" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="inventory" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Warehouse</p>
-                                <p class="text-xs text-gray-400">Multi-warehouse management</p>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            @* HR & Employees Section *@
-            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50">
-                    <div class="flex items-center gap-3">
-                        <div class="w-7 h-7 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-purple-600" viewBox="0 0 24 24">
-                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                            </svg>
-                        </div>
-                        <h2 class="text-sm font-semibold text-gray-700">HR & Employees</h2>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs text-gray-400">Select all</span>
-                        <input type="checkbox" id="selectAllHr" onchange="toggleSection('hr', this.checked)" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                    </div>
-                </div>
-                <div class="px-5 py-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="employees" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="hr" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Employees</p>
-                                <p class="text-xs text-gray-400">Employee directory</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="attendance" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="hr" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Attendance</p>
-                                <p class="text-xs text-gray-400">Time tracking</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="payroll" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="hr" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Payroll</p>
-                                <p class="text-xs text-gray-400">Salary management</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="leaves" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="hr" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Leaves</p>
-                                <p class="text-xs text-gray-400">Leave requests</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="recruitment" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="hr" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Recruitment</p>
-                                <p class="text-xs text-gray-400">Job postings & candidates</p>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            @* Finance & Accounting Section *@
+            @* Finance & Accounting POS Section *@
             <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
                 <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50">
                     <div class="flex items-center gap-3">
@@ -353,7 +95,7 @@
                                 <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
                             </svg>
                         </div>
-                        <h2 class="text-sm font-semibold text-gray-700">Finance & Accounting</h2>
+                        <h2 class="text-sm font-semibold text-gray-700">Finance & Accounting POS</h2>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="text-xs text-gray-400">Select all</span>
@@ -365,156 +107,227 @@
                         <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
                             <input type="checkbox" name="PageAllowances" value="general_ledger" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
                             <div>
-                                <p class="text-sm font-medium text-gray-700">General Ledger</p>
-                                <p class="text-xs text-gray-400">Chart of accounts</p>
+                                <p class="text-sm font-medium text-gray-700">Product</p>
+                               
                             </div>
                         </label>
                         <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
                             <input type="checkbox" name="PageAllowances" value="bank_reconciliation" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
                             <div>
-                                <p class="text-sm font-medium text-gray-700">Bank Reconciliation</p>
-                                <p class="text-xs text-gray-400">Match transactions</p>
+                                <p class="text-sm font-medium text-gray-700">Customer</p>
+                               
                             </div>
                         </label>
                         <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
                             <input type="checkbox" name="PageAllowances" value="tax_management" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
                             <div>
-                                <p class="text-sm font-medium text-gray-700">Tax Management</p>
-                                <p class="text-xs text-gray-400">Tax calculations & filing</p>
+                                <p class="text-sm font-medium text-gray-700">Vendor</p>
+                               
+                            </div>
+                        </label>
+                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <input type="checkbox" name="PageAllowances" value="expenses" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Bank</p>
+                               
+                            </div>
+                        </label>
+                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <input type="checkbox" name="PageAllowances" value="financial_reports" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Opening Cash</p>
+                               
+                            </div>
+                        </label>
+                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <input type="checkbox" name="PageAllowances" value="budgeting" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Master Configuration</p>
+                              
+                            </div>
+                        </label>
+                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <input type="checkbox" name="PageAllowances" value="expenses" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Orders</p>
+                              
+                            </div>
+                        </label>
+                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <input type="checkbox" name="PageAllowances" value="financial_reports" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Customer Invoice</p>
+                                
+                            </div>
+                        </label>
+                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <input type="checkbox" name="PageAllowances" value="budgeting" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Receipt</p>
+                               
+                            </div>
+                        </label>
+                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <input type="checkbox" name="PageAllowances" value="general_ledger" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Sale Return</p>
+                               
+                            </div>
+                        </label>
+                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <input type="checkbox" name="PageAllowances" value="bank_reconciliation" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Vendor Invoice</p>
+                               
+                            </div>
+                        </label>
+                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <input type="checkbox" name="PageAllowances" value="tax_management" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Payment</p>
+                               
+                            </div>
+                        </label>
+                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <input type="checkbox" name="PageAllowances" value="expenses" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Purchase Return</p>
+                               
+                            </div>
+                        </label>
+                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <input type="checkbox" name="PageAllowances" value="financial_reports" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Cash Billing</p>
+                               
+                            </div>
+                        </label>
+                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <input type="checkbox" name="PageAllowances" value="budgeting" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Cash Billing Return</p>
+                              
                             </div>
                         </label>
                         <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
                             <input type="checkbox" name="PageAllowances" value="expenses" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
                             <div>
                                 <p class="text-sm font-medium text-gray-700">Expenses</p>
-                                <p class="text-xs text-gray-400">Expense tracking</p>
+                              
                             </div>
                         </label>
                         <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
                             <input type="checkbox" name="PageAllowances" value="financial_reports" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
                             <div>
-                                <p class="text-sm font-medium text-gray-700">Financial Reports</p>
-                                <p class="text-xs text-gray-400">P&L, Balance Sheet</p>
+                                <p class="text-sm font-medium text-gray-700">Stock Adjustment</p>
+                                
                             </div>
                         </label>
                         <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
                             <input type="checkbox" name="PageAllowances" value="budgeting" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
                             <div>
-                                <p class="text-sm font-medium text-gray-700">Budgeting</p>
-                                <p class="text-xs text-gray-400">Budget planning</p>
+                                <p class="text-sm font-medium text-gray-700">Rollback</p>
                             </div>
                         </label>
                     </div>
                 </div>
             </div>
 
-            @* Settings & Configuration Section *@
+            @* Finance & Accounting POS Report Section *@
             <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
                 <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50">
                     <div class="flex items-center gap-3">
-                        <div class="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-gray-600" viewBox="0 0 24 24">
-                                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.33-.02-.64-.06-.94l2.02-1.58c.18-.14.23-.38.12-.56l-1.89-3.28c-.12-.19-.36-.26-.56-.18l-2.38.96c-.5-.38-1.06-.68-1.66-.88L14.45 3.5c-.04-.2-.2-.34-.4-.34h-3.78c-.2 0-.36.14-.4.34l-.3 2.52c-.6.2-1.16.5-1.66.88l-2.38-.96c-.2-.08-.44-.01-.56.18l-1.89 3.28c-.12.19-.07.42.12.56l2.02 1.58c-.04.3-.06.61-.06.94 0 .33.02.64.06.94l-2.02 1.58c-.18.14-.23.38-.12.56l1.89 3.28c.12.19.36.26.56.18l2.38-.96c.5.38 1.06.68 1.66.88l.3 2.52c.04.2.2.34.4.34h3.78c.2 0 .36-.14.4-.34l.3-2.52c.6-.2 1.16-.5 1.66-.88l2.38.96c.2.08.44.01.56-.18l1.89-3.28c.12-.19.07-.42-.12-.56l-2.02-1.58zM12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z" />
+                        <div class="w-7 h-7 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-red-600" viewBox="0 0 24 24">
+                                <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
                             </svg>
                         </div>
-                        <h2 class="text-sm font-semibold text-gray-700">Settings & Configuration</h2>
+                        <h2 class="text-sm font-semibold text-gray-700">Finance & Accounting POS Reports</h2>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="text-xs text-gray-400">Select all</span>
-                        <input type="checkbox" id="selectAllSettings" onchange="toggleSection('settings', this.checked)" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                        <input type="checkbox" id="selectAllFinance" onchange="toggleSection('finance', this.checked)" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
                     </div>
                 </div>
+
                 <div class="px-5 py-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="company_settings" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="settings" />
+                            <input type="checkbox" name="PageAllowances" value="general_ledger" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
                             <div>
-                                <p class="text-sm font-medium text-gray-700">Company Settings</p>
-                                <p class="text-xs text-gray-400">Profile & preferences</p>
+                                <p class="text-sm font-medium text-gray-700">Customer Balance</p>
+                               
                             </div>
                         </label>
                         <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="user_roles" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="settings" />
+                            <input type="checkbox" name="PageAllowances" value="bank_reconciliation" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
                             <div>
-                                <p class="text-sm font-medium text-gray-700">User Roles & Permissions</p>
-                                <p class="text-xs text-gray-400">Access control</p>
+                                <p class="text-sm font-medium text-gray-700">Vendor Balance</p>
+                               
                             </div>
                         </label>
                         <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="integrations" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="settings" />
+                            <input type="checkbox" name="PageAllowances" value="tax_management" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
                             <div>
-                                <p class="text-sm font-medium text-gray-700">Integrations</p>
-                                <p class="text-xs text-gray-400">Third-party apps</p>
+                                <p class="text-sm font-medium text-gray-700">Bank Balance</p>
+                               
                             </div>
                         </label>
                         <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="api_access" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="settings" />
+                            <input type="checkbox" name="PageAllowances" value="expenses" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
                             <div>
-                                <p class="text-sm font-medium text-gray-700">API Access</p>
-                                <p class="text-xs text-gray-400">REST API keys</p>
+                                <p class="text-sm font-medium text-gray-700">Stock Report</p>
+                               
                             </div>
                         </label>
                         <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="audit_logs" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="settings" />
+                            <input type="checkbox" name="PageAllowances" value="financial_reports" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
                             <div>
-                                <p class="text-sm font-medium text-gray-700">Audit Logs</p>
-                                <p class="text-xs text-gray-400">System activity tracking</p>
+                                <p class="text-sm font-medium text-gray-700">Stock Ledger</p>
+                               
                             </div>
                         </label>
                         <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="backup" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="settings" />
+                            <input type="checkbox" name="PageAllowances" value="budgeting" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
                             <div>
-                                <p class="text-sm font-medium text-gray-700">Backup & Restore</p>
-                                <p class="text-xs text-gray-400">Data backup management</p>
+                                <p class="text-sm font-medium text-gray-700">Customer Ledger</p>
+                              
                             </div>
                         </label>
+                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <input type="checkbox" name="PageAllowances" value="expenses" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Vendor Ledger</p>
+                            </div>
+                        </label>
+                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <input type="checkbox" name="PageAllowances" value="financial_reports" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Bank/Cash Ledger</p>
+                                
+                            </div>
+                        </label>
+                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <input type="checkbox" name="PageAllowances" value="budgeting" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Expenses Report</p>
+                               
+                            </div>
+                        </label>
+                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <input type="checkbox" name="PageAllowances" value="general_ledger" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Overall Daily Report</p>
+                               
+                            </div>
+                        </label>
+                      
+                       
                     </div>
                 </div>
             </div>
 
-            @* Support & Help Section *@
-            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50">
-                    <div class="flex items-center gap-3">
-                        <div class="w-7 h-7 rounded-lg bg-teal-100 flex items-center justify-center flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-teal-600" viewBox="0 0 24 24">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2-7h-2v5h-2v-5H9v-2h6v2z" />
-                            </svg>
-                        </div>
-                        <h2 class="text-sm font-semibold text-gray-700">Support & Help</h2>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs text-gray-400">Select all</span>
-                        <input type="checkbox" id="selectAllSupport" onchange="toggleSection('support', this.checked)" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                    </div>
-                </div>
-                <div class="px-5 py-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="knowledge_base" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="support" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Knowledge Base</p>
-                                <p class="text-xs text-gray-400">Help articles & guides</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="support_tickets" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="support" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Support Tickets</p>
-                                <p class="text-xs text-gray-400">Raise and track tickets</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="chat_support" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="support" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Live Chat Support</p>
-                                <p class="text-xs text-gray-400">Real-time assistance</p>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
+          
         </div>
     </div>
 </form>

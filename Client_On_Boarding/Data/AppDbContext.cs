@@ -21,6 +21,8 @@ namespace Client_On_Boarding.Data
         public DbSet<Pages> Pages { get; set; }
         public DbSet<PagesFieldSettings> PageFieldSetting { get; set; }
 
+        public DbSet<ClientPageAllowance> ClientPageAllowances { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -161,5 +163,7 @@ namespace Client_On_Boarding.Data
 
 
         }
+
+      
     }
 }

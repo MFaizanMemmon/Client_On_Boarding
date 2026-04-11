@@ -1,4 +1,5 @@
 ﻿using Client_On_Boarding.DTO;
+using Client_On_Boarding.Models;
 using Client_On_Boarding.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -33,6 +34,26 @@ namespace Client_On_Boarding.Controllers
             
             return View(vm);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveAllowances(ClientPagesAllowancesVM request)
+        {
+            if (request.ClientId == 0)
+            {
+                TempData["Error"] = "Please select a client.";
+                return RedirectToAction("PageAllowance");
+            }
+
+            request.PageIds ??= new List<int>();
+
+            await _pagesFieldAllowanceRepository.AddClientPageAllowances(request);
+
+            TempData["Success"] = $"Saved {request.PageIds.Count} page allowances successfully.";
+            return RedirectToAction("PageAllowance", new { clientId = request.ClientId });
+        }
+
+
         public IActionResult PageFieldAllowance()
         {
             return View();

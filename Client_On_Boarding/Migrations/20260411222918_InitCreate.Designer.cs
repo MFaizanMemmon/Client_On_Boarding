@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Client_On_Boarding.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260410220629_PageAllowances")]
-    partial class PageAllowances
+    [Migration("20260411222918_InitCreate")]
+    partial class InitCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,38 +57,38 @@ namespace Client_On_Boarding.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(4968),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(948),
                             CreatedBy = 0,
                             IndustryName = "Rice Wholesaler",
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(4972)
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(968)
                         },
                         new
                         {
                             Id = 2,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(4975),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(971),
                             CreatedBy = 0,
                             IndustryName = "Medical Wholesaler",
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(4975)
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(971)
                         },
                         new
                         {
                             Id = 3,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(4976),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(972),
                             CreatedBy = 0,
                             IndustryName = "Electronics",
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(4976)
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(972)
                         },
                         new
                         {
                             Id = 4,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(4977),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(973),
                             CreatedBy = 0,
                             IndustryName = "Restaurant",
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(4977)
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(974)
                         });
                 });
 
@@ -178,13 +178,13 @@ namespace Client_On_Boarding.Migrations
                             ClientName = "By Default",
                             CompanyName = "Software Company",
                             CountryId = 3,
-                            CreateDate = new DateTime(2026, 4, 11, 3, 6, 29, 237, DateTimeKind.Local).AddTicks(5188),
+                            CreateDate = new DateTime(2026, 4, 12, 3, 29, 18, 371, DateTimeKind.Local).AddTicks(1230),
                             CreatedBy = 0,
                             IndustryId = 3,
                             LeadSourceID = 3,
                             LeadStatusID = 4,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5179),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1218),
                             Notes = "",
                             PhoneNo = "",
                             PhotoPath = "",
@@ -193,6 +193,37 @@ namespace Client_On_Boarding.Migrations
                             Province = "",
                             StreetAddress = ""
                         });
+                });
+
+            modelBuilder.Entity("Client_On_Boarding.Models.ClientPageAllowance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ModifyBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifyDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PageId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClientPageAllowances");
                 });
 
             modelBuilder.Entity("Client_On_Boarding.Models.Country", b =>
@@ -227,37 +258,37 @@ namespace Client_On_Boarding.Migrations
                         {
                             Id = 1,
                             CountryName = "Bangladesh",
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5103),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1129),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5104)
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1129)
                         },
                         new
                         {
                             Id = 2,
                             CountryName = "India",
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5105),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1130),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5105)
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1130)
                         },
                         new
                         {
                             Id = 3,
                             CountryName = "Pakistan",
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5106),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1131),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5106)
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1132)
                         },
                         new
                         {
                             Id = 4,
                             CountryName = "Sri Lanka",
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5107),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1132),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5107)
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1133)
                         });
                 });
 
@@ -293,28 +324,28 @@ namespace Client_On_Boarding.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5162),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1198),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5162),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1199),
                             PriorityName = "Low"
                         },
                         new
                         {
                             Id = 2,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5163),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1200),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5163),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1200),
                             PriorityName = "Medium"
                         },
                         new
                         {
                             Id = 3,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5164),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1201),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5164),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1201),
                             PriorityName = "High"
                         });
                 });
@@ -350,38 +381,38 @@ namespace Client_On_Boarding.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5125),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1152),
                             CreatedBy = 0,
                             LeadSourceName = "Referral",
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5125)
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1153)
                         },
                         new
                         {
                             Id = 2,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5126),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1154),
                             CreatedBy = 0,
                             LeadSourceName = "Website",
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5127)
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1154)
                         },
                         new
                         {
                             Id = 3,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5127),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1155),
                             CreatedBy = 0,
                             LeadSourceName = "LinkedIn",
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5128)
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1155)
                         },
                         new
                         {
                             Id = 4,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5128),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1156),
                             CreatedBy = 0,
                             LeadSourceName = "Cold Call",
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5129)
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1156)
                         });
                 });
 
@@ -417,37 +448,37 @@ namespace Client_On_Boarding.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5144),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1176),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5144),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1176),
                             StatusName = "New"
                         },
                         new
                         {
                             Id = 2,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5145),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1177),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5145),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1177),
                             StatusName = "Contacted"
                         },
                         new
                         {
                             Id = 3,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5146),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1178),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5146),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1178),
                             StatusName = "Follow-up"
                         },
                         new
                         {
                             Id = 4,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5147),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1179),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5147),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1180),
                             StatusName = "Active"
                         });
                 });
@@ -484,253 +515,253 @@ namespace Client_On_Boarding.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5245),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1319),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5246),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1319),
                             PageName = "Products"
                         },
                         new
                         {
                             Id = 2,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5283),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1321),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5284),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1321),
                             PageName = "Customers"
                         },
                         new
                         {
                             Id = 3,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5285),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1322),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5285),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1322),
                             PageName = "Vendors"
                         },
                         new
                         {
                             Id = 4,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5286),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1323),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5286),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1323),
                             PageName = "Bank Accounts"
                         },
                         new
                         {
                             Id = 5,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5287),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1324),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5287),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1324),
                             PageName = "Opening Cash"
                         },
                         new
                         {
                             Id = 6,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5288),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1325),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5288),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1325),
                             PageName = "General Journal Voucher"
                         },
                         new
                         {
                             Id = 7,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5289),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1326),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5289),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1326),
                             PageName = "Master Configuration"
                         },
                         new
                         {
                             Id = 8,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5290),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1327),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5290),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1327),
                             PageName = "Orders"
                         },
                         new
                         {
                             Id = 9,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5291),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1328),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5291),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1328),
                             PageName = "Invoices"
                         },
                         new
                         {
                             Id = 10,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5292),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1329),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5292),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1329),
                             PageName = "Receipt"
                         },
                         new
                         {
                             Id = 11,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5292),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1333),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5293),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1333),
                             PageName = "Sale Return"
                         },
                         new
                         {
                             Id = 12,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5293),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1334),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5294),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1334),
                             PageName = "Purchase Invoices"
                         },
                         new
                         {
                             Id = 13,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5294),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1335),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5295),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1335),
                             PageName = "Payment"
                         },
                         new
                         {
                             Id = 14,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5295),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1336),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5296),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1336),
                             PageName = "Purchase Return"
                         },
                         new
                         {
                             Id = 15,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5296),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1337),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5297),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1337),
                             PageName = "Cash Billing"
                         },
                         new
                         {
                             Id = 16,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5297),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1338),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5298),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1338),
                             PageName = "Counter Sale Return"
                         },
                         new
                         {
                             Id = 17,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5298),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1338),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5298),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1339),
                             PageName = "Expenses"
                         },
                         new
                         {
                             Id = 18,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5299),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1339),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5299),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1340),
                             PageName = "Stock Adjustment"
                         },
                         new
                         {
                             Id = 19,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5300),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1340),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5300),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1341),
                             PageName = "Rollback"
                         },
                         new
                         {
                             Id = 20,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5301),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1341),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5301),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1342),
                             PageName = "Customer Balance"
                         },
                         new
                         {
                             Id = 21,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5302),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1342),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5302),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1343),
                             PageName = "Vendor Balance"
                         },
                         new
                         {
                             Id = 22,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5303),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1343),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5303),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1343),
                             PageName = "Bank Balance"
                         },
                         new
                         {
                             Id = 23,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5304),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1344),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5304),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1344),
                             PageName = "Stock Report"
                         },
                         new
                         {
                             Id = 24,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5305),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1345),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5305),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1345),
                             PageName = "Customer Ledger"
                         },
                         new
                         {
                             Id = 25,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5305),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1388),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5306),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1388),
                             PageName = "Vendor Ledger"
                         },
                         new
                         {
                             Id = 26,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5306),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1389),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5307),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1389),
                             PageName = "Bank/Cash Ledger"
                         },
                         new
                         {
                             Id = 27,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5307),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1390),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5308),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1390),
                             PageName = "Expenses Reports"
                         },
                         new
                         {
                             Id = 28,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5308),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1391),
                             CreatedBy = 0,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5309),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1391),
                             PageName = "Overall Daily Report"
                         });
                 });
@@ -742,9 +773,6 @@ namespace Client_On_Boarding.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2");
@@ -779,430 +807,397 @@ namespace Client_On_Boarding.Migrations
                         new
                         {
                             Id = 1,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5339),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1425),
                             CreatedBy = 0,
                             FieldName = "Product Name",
                             IsRequired = true,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5340),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1426),
                             PageId = 1
                         },
                         new
                         {
                             Id = 2,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5341),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1428),
                             CreatedBy = 0,
                             FieldName = "Company",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5341),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1428),
                             PageId = 1
                         },
                         new
                         {
                             Id = 3,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5343),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1429),
                             CreatedBy = 0,
                             FieldName = "Category",
                             IsRequired = true,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5343),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1429),
                             PageId = 1
                         },
                         new
                         {
                             Id = 4,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5344),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1430),
                             CreatedBy = 0,
                             FieldName = "Main Unit",
                             IsRequired = true,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5344),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1431),
                             PageId = 1
                         },
                         new
                         {
                             Id = 5,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5345),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1432),
                             CreatedBy = 0,
                             FieldName = "Has Alternate Unit?",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5346),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1432),
                             PageId = 1
                         },
                         new
                         {
                             Id = 6,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5347),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1433),
                             CreatedBy = 0,
                             FieldName = "Purchase Rate",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5347),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1433),
                             PageId = 1
                         },
                         new
                         {
                             Id = 7,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5348),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1434),
                             CreatedBy = 0,
                             FieldName = "Sales Rate",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5348),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1434),
                             PageId = 1
                         },
                         new
                         {
                             Id = 8,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5349),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1435),
                             CreatedBy = 0,
                             FieldName = "Opening Stock",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5349),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1436),
                             PageId = 1
                         },
                         new
                         {
                             Id = 9,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5350),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1437),
                             CreatedBy = 0,
                             FieldName = "Active",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5351),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1437),
                             PageId = 1
                         },
                         new
                         {
                             Id = 10,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5351),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1438),
                             CreatedBy = 0,
                             FieldName = "Customer Name",
                             IsRequired = true,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5352),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1438),
                             PageId = 2
                         },
                         new
                         {
                             Id = 11,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5353),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1446),
                             CreatedBy = 0,
                             FieldName = "City",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5353),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1447),
                             PageId = 2
                         },
                         new
                         {
                             Id = 12,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5354),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1448),
                             CreatedBy = 0,
                             FieldName = "Area By City",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5354),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1448),
                             PageId = 2
                         },
                         new
                         {
                             Id = 13,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5355),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1449),
                             CreatedBy = 0,
                             FieldName = "Full Address",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5355),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1449),
                             PageId = 2
                         },
                         new
                         {
                             Id = 14,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5356),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1450),
                             CreatedBy = 0,
                             FieldName = "Office Phone",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5357),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1450),
                             PageId = 2
                         },
                         new
                         {
                             Id = 15,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5357),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1451),
                             CreatedBy = 0,
                             FieldName = "Contact No 1",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5358),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1452),
                             PageId = 2
                         },
                         new
                         {
                             Id = 16,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5359),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1453),
                             CreatedBy = 0,
                             FieldName = "Contact No 2",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5359),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1453),
                             PageId = 2
                         },
                         new
                         {
                             Id = 17,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5360),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1454),
                             CreatedBy = 0,
                             FieldName = "Opening Balance",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5360),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1454),
                             PageId = 2
                         },
                         new
                         {
                             Id = 18,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5361),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1455),
                             CreatedBy = 0,
                             FieldName = "Active",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5361),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1455),
                             PageId = 2
                         },
                         new
                         {
                             Id = 19,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5362),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1456),
                             CreatedBy = 0,
                             FieldName = "Vendor Name",
                             IsRequired = true,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5363),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1457),
                             PageId = 3
                         },
                         new
                         {
                             Id = 20,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5364),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1458),
                             CreatedBy = 0,
                             FieldName = "City",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5364),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1458),
                             PageId = 3
                         },
                         new
                         {
                             Id = 21,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5365),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1459),
                             CreatedBy = 0,
                             FieldName = "Area By City",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5365),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1459),
                             PageId = 3
                         },
                         new
                         {
                             Id = 22,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5366),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1460),
                             CreatedBy = 0,
                             FieldName = "Full Address",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5366),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1460),
                             PageId = 3
                         },
                         new
                         {
                             Id = 23,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5367),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1461),
                             CreatedBy = 0,
                             FieldName = "Office Phone",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5367),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1462),
                             PageId = 3
                         },
                         new
                         {
                             Id = 24,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5368),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1463),
                             CreatedBy = 0,
                             FieldName = "Contact No 1",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5369),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1463),
                             PageId = 3
                         },
                         new
                         {
                             Id = 25,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5370),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1464),
                             CreatedBy = 0,
                             FieldName = "Contact No 2",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5370),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1464),
                             PageId = 3
                         },
                         new
                         {
                             Id = 26,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5371),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1465),
                             CreatedBy = 0,
                             FieldName = "Opening Balance",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5371),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1465),
                             PageId = 3
                         },
                         new
                         {
                             Id = 27,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5372),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1466),
                             CreatedBy = 0,
                             FieldName = "Active",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5372),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1467),
                             PageId = 3
                         },
                         new
                         {
                             Id = 28,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5373),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1468),
                             CreatedBy = 0,
                             FieldName = "Bank Name",
                             IsRequired = true,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5374),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1469),
                             PageId = 4
                         },
                         new
                         {
                             Id = 29,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5375),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1470),
                             CreatedBy = 0,
                             FieldName = "Account Holder",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5375),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1471),
                             PageId = 4
                         },
                         new
                         {
                             Id = 30,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5376),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1472),
                             CreatedBy = 0,
                             FieldName = "Account No",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5376),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1472),
                             PageId = 4
                         },
                         new
                         {
                             Id = 31,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5377),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1475),
                             CreatedBy = 0,
                             FieldName = "Address",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5377),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1475),
                             PageId = 4
                         },
                         new
                         {
                             Id = 32,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5378),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1479),
                             CreatedBy = 0,
                             FieldName = "Opening Balance",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5378),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1479),
                             PageId = 4
                         },
                         new
                         {
                             Id = 33,
-                            ClientId = 0,
-                            CreateDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5379),
+                            CreateDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1481),
                             CreatedBy = 0,
                             FieldName = "Active",
                             IsRequired = false,
                             IsView = true,
                             ModifyBy = 0,
-                            ModifyDate = new DateTime(2026, 4, 10, 22, 6, 29, 237, DateTimeKind.Utc).AddTicks(5380),
+                            ModifyDate = new DateTime(2026, 4, 11, 22, 29, 18, 371, DateTimeKind.Utc).AddTicks(1481),
                             PageId = 4
                         });
                 });

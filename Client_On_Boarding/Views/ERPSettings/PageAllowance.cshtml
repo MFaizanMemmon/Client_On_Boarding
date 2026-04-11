@@ -1,24 +1,23 @@
-﻿@{
+﻿@using Client_On_Boarding.DTO
+@model PageFieldAllowanceVM
+@{
     ViewData["Title"] = "Page Allowances";
 }
 
-@* ── Page Header ── *@
 <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
     <div>
         <div class="flex items-center gap-2 text-sm text-gray-400 mb-1">
             <a asp-action="Index" asp-controller="Home" class="hover:text-blue-600 transition-colors">Dashboard</a>
             <span>/</span>
-          
-      
             <span class="text-gray-600">Page Allowances</span>
         </div>
         <h1 class="text-2xl font-semibold text-gray-800">Page Allowances</h1>
-        <p class="text-sm text-gray-500 mt-0.5">Configure which ERP pages and modules are accessible for each client tier</p>
+        <p class="text-sm text-gray-500 mt-0.5">Configure which pages are accessible for each client</p>
     </div>
     <div class="flex items-center gap-3">
-        <button type="button" onclick="resetToDefault()"
+        <button type="button" onclick="resetAll()"
                 class="text-sm text-gray-600 border border-gray-200 rounded-lg px-4 py-2.5 hover:bg-gray-50 transition-colors">
-            Reset to Default
+            Reset
         </button>
         <button type="button" onclick="saveAllowances()"
                 class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors">
@@ -30,435 +29,222 @@
     </div>
 </div>
 
-<form id="pageAllowancesForm" method="post">
-    @Html.AntiForgeryToken()
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+    @* LEFT COLUMN *@
+    <div class="xl:col-span-1 space-y-6">
 
-        @* ── LEFT COLUMN (Client/Tier Selection) ── *@
-        <div class="xl:col-span-1 space-y-6">
-            
-            @* Client/Tier Selector *@
-            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                <div class="flex items-center gap-3 px-5 py-4 border-b border-gray-100 bg-gray-50">
-                    <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-blue-600" viewBox="0 0 512 512">
-                            <path d="M437.02 74.98C388.668 26.63 324.379 0 256 0S123.332 26.629 74.98 74.98C26.63 123.332 0 187.621 0 256s26.629 132.668 74.98 181.02C123.332 485.37 187.621 512 256 512s132.668-26.629 181.02-74.98C485.37 388.668 512 324.379 512 256s-26.629-132.668-74.98-181.02zM111.105 429.297c8.454-72.735 70.989-128.89 144.895-128.89 38.96 0 75.598 15.179 103.156 42.734 23.281 23.285 37.965 53.687 41.742 86.152C361.641 462.172 311.094 482 256 482s-105.637-19.824-144.895-52.703zM256 269.507c-42.871 0-77.754-34.882-77.754-77.753C178.246 148.879 213.13 114 256 114s77.754 34.879 77.754 77.754c0 42.871-34.883 77.754-77.754 77.754z" />
-                        </svg>
-                    </div>
-                    <h2 class="text-sm font-semibold text-gray-700">Select Client / Tier</h2>
+        @* Client Selector *@
+        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+            <div class="flex items-center gap-3 px-5 py-4 border-b border-gray-100 bg-gray-50">
+                <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-blue-600" viewBox="0 0 512 512">
+                        <path d="M437.02 74.98C388.668 26.63 324.379 0 256 0S123.332 26.629 74.98 74.98C26.63 123.332 0 187.621 0 256s26.629 132.668 74.98 181.02C123.332 485.37 187.621 512 256 512s132.668-26.629 181.02-74.98C485.37 388.668 512 324.379 512 256s-26.629-132.668-74.98-181.02zM111.105 429.297c8.454-72.735 70.989-128.89 144.895-128.89 38.96 0 75.598 15.179 103.156 42.734 23.281 23.285 37.965 53.687 41.742 86.152C361.641 462.172 311.094 482 256 482s-105.637-19.824-144.895-52.703zM256 269.507c-42.871 0-77.754-34.882-77.754-77.753C178.246 148.879 213.13 114 256 114s77.754 34.879 77.754 77.754c0 42.871-34.883 77.754-77.754 77.754z" />
+                    </svg>
                 </div>
-                <div class="px-5 py-5">
-                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Client</label>
-                    <select id="clientSelect" name="ClientId" onchange="loadClientAllowances()"
-                            class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 transition-all mb-4">
-                        <option value="">Select a client</option>
-                        <option value="1">Nexova Ltd (Ahmed Raza)</option>
-                        <option value="2">Apexion Inc. (David Osei)</option>
-                        <option value="3">Cloudform Pvt. (Priya Nair)</option>
-                        <option value="4">DataSpark GmbH (Lena Müller)</option>
-                        <option value="5">Brightline Co. (Sara Malik)</option>
-                    </select>
-                 
-                </div>
+                <h2 class="text-sm font-semibold text-gray-700">Select Client</h2>
             </div>
-
-           
-
-            @* Quick Actions *@
-            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                <div class="px-5 py-4 border-b border-gray-100 bg-gray-50">
-                    <h2 class="text-sm font-semibold text-gray-700">Quick Actions</h2>
-                </div>
-                <div class="px-5 py-4 space-y-2">
-                    <button type="button" onclick="selectAllPages()" class="w-full text-left text-sm text-gray-600 hover:text-blue-600 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14H7v-2h3v2zm0-4H7v-2h3v2zm0-4H7V7h3v2zm6 8h-3v-2h3v2zm0-4h-3v-2h3v2zm0-4h-3V7h3v2z" /></svg>
-                        Select All Pages
-                    </button>
-                    <button type="button" onclick="deselectAllPages()" class="w-full text-left text-sm text-gray-600 hover:text-red-600 py-2 px-3 rounded-lg hover:bg-red-50 transition-colors flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14H7v-2h3v2zm0-4H7v-2h3v2zm0-4H7V7h3v2z" /></svg>
-                        Deselect All Pages
-                    </button>
-                   
-                </div>
+            <div class="px-5 py-5">
+                <label class="block text-xs font-medium text-gray-600 mb-1.5">Client</label>
+                <select id="clientSelect"
+                        class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 transition-all">
+                    <option value="">Select a client</option>
+                    @foreach (var c in Model.ClientDropdown)
+                    {
+                        if (c.Value == Model.SelectedClientId?.ToString())
+                        {
+                            <option value="@c.Value" selected>@c.Text</option>
+                        }
+                        else
+                        {
+                            <option value="@c.Value">@c.Text</option>
+                        }
+                    }
+                </select>
             </div>
         </div>
 
-        @* ── RIGHT COLUMN (Page Allowances Grid) ── *@
-        <div class="xl:col-span-2 space-y-6">
-            @* Finance & Accounting POS Section *@
-            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50">
-                    <div class="flex items-center gap-3">
-                        <div class="w-7 h-7 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-red-600" viewBox="0 0 24 24">
-                                <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
-                            </svg>
-                        </div>
-                        <h2 class="text-sm font-semibold text-gray-700">Finance & Accounting POS</h2>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs text-gray-400">Select all</span>
-                        <input type="checkbox" id="selectAllFinance" onchange="toggleSection('finance', this.checked)" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                    </div>
+        @* Quick Actions *@
+        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-100 bg-gray-50">
+                <h2 class="text-sm font-semibold text-gray-700">Quick Actions</h2>
+            </div>
+            <div class="px-5 py-4 space-y-2">
+                <button type="button" onclick="selectAllPages()"
+                        class="w-full text-left text-sm text-gray-600 hover:text-blue-600 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14H7v-2h3v2zm0-4H7v-2h3v2zm0-4H7V7h3v2zm6 8h-3v-2h3v2zm0-4h-3v-2h3v2zm0-4h-3V7h3v2z" />
+                    </svg>
+                    Select All Pages
+                </button>
+                <button type="button" onclick="deselectAllPages()"
+                        class="w-full text-left text-sm text-gray-600 hover:text-red-600 py-2 px-3 rounded-lg hover:bg-red-50 transition-colors flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14H7v-2h3v2zm0-4H7v-2h3v2zm0-4H7V7h3v2z" />
+                    </svg>
+                    Deselect All Pages
+                </button>
+            </div>
+        </div>
+
+        @* Summary *@
+        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-100 bg-gray-50">
+                <h2 class="text-sm font-semibold text-gray-700">Summary</h2>
+            </div>
+            <div class="px-5 py-4 space-y-3">
+                <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-500">Selected Pages</span>
+                    <span id="selectedCount" class="font-semibold text-gray-800">0</span>
                 </div>
-                <div class="px-5 py-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="general_ledger" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Product</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="bank_reconciliation" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Customer</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="tax_management" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Vendor</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="expenses" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Bank</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="financial_reports" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Opening Cash</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="budgeting" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Master Configuration</p>
-                              
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="expenses" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Orders</p>
-                              
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="financial_reports" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Customer Invoice</p>
-                                
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="budgeting" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Receipt</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="general_ledger" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Sale Return</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="bank_reconciliation" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Vendor Invoice</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="tax_management" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Payment</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="expenses" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Purchase Return</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="financial_reports" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Cash Billing</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="budgeting" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Cash Billing Return</p>
-                              
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="expenses" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Expenses</p>
-                              
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="financial_reports" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Stock Adjustment</p>
-                                
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="budgeting" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Rollback</p>
-                            </div>
-                        </label>
-                    </div>
+                <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-500">Total Pages</span>
+                    <span class="font-semibold text-gray-800">@(Model.Pages?.Count ?? 0)</span>
+                </div>
+                <div class="w-full bg-gray-100 rounded-full h-2">
+                    <div id="progressBar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
                 </div>
             </div>
-
-            @* Finance & Accounting POS Report Section *@
-            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50">
-                    <div class="flex items-center gap-3">
-                        <div class="w-7 h-7 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-red-600" viewBox="0 0 24 24">
-                                <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
-                            </svg>
-                        </div>
-                        <h2 class="text-sm font-semibold text-gray-700">Finance & Accounting POS Reports</h2>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs text-gray-400">Select all</span>
-                        <input type="checkbox" id="selectAllFinance" onchange="toggleSection('finance', this.checked)" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                    </div>
-                </div>
-
-                <div class="px-5 py-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="general_ledger" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Customer Balance</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="bank_reconciliation" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Vendor Balance</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="tax_management" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Bank Balance</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="expenses" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Stock Report</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="financial_reports" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Stock Ledger</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="budgeting" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Customer Ledger</p>
-                              
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="expenses" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Vendor Ledger</p>
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="financial_reports" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Bank/Cash Ledger</p>
-                                
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="budgeting" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Expenses Report</p>
-                               
-                            </div>
-                        </label>
-                        <label class="allowance-item flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                            <input type="checkbox" name="PageAllowances" value="general_ledger" class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" data-section="finance" />
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Overall Daily Report</p>
-                               
-                            </div>
-                        </label>
-                      
-                       
-                    </div>
-                </div>
-            </div>
-
-          
         </div>
     </div>
-</form>
+
+    @* RIGHT COLUMN *@
+    <div class="xl:col-span-2 space-y-6">
+
+        @if (!Model.SelectedClientId.HasValue)
+        {
+            <div class="bg-white border border-gray-200 rounded-xl p-10 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 fill-gray-300 mx-auto mb-3" viewBox="0 0 512 512">
+                    <path d="M437.02 74.98C388.668 26.63 324.379 0 256 0S123.332 26.629 74.98 74.98C26.63 123.332 0 187.621 0 256s26.629 132.668 74.98 181.02C123.332 485.37 187.621 512 256 512s132.668-26.629 181.02-74.98C485.37 388.668 512 324.379 512 256s-26.629-132.668-74.98-181.02zM111.105 429.297c8.454-72.735 70.989-128.89 144.895-128.89 38.96 0 75.598 15.179 103.156 42.734 23.281 23.285 37.965 53.687 41.742 86.152C361.641 462.172 311.094 482 256 482s-105.637-19.824-144.895-52.703zM256 269.507c-42.871 0-77.754-34.882-77.754-77.753C178.246 148.879 213.13 114 256 114s77.754 34.879 77.754 77.754c0 42.871-34.883 77.754-77.754 77.754z" />
+                </svg>
+                <p class="text-sm text-gray-400">Select a client on the left to configure their page allowances.</p>
+            </div>
+        }
+        else
+        {
+            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50">
+                    <div class="flex items-center gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-red-600" viewBox="0 0 24 24">
+                                <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
+                            </svg>
+                        </div>
+                        <h2 class="text-sm font-semibold text-gray-700">All Pages</h2>
+                        <span class="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">@(Model.Pages?.Count ?? 0) pages</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-gray-400">Select all</span>
+                        <input type="checkbox" id="selectAllPages"
+                               onchange="selectAllToggle(this.checked)"
+                               class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                    </div>
+                </div>
+                <div class="px-5 py-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        @if (Model.Pages != null)
+                        {
+                            @foreach (var pageItem in Model.Pages)
+                            {
+                                <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors border border-transparent hover:border-gray-200">
+                                    <input type="checkbox"
+                                           name="PageAllowances"
+                                           value="@pageItem.Id"
+                                           class="page-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                                    <span class="text-sm font-medium text-gray-700">@pageItem.PageName</span>
+                                </label>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
 
 @section Scripts {
     <script>
-        // Page allowances management
-        let selectedCount = 0;
-        const totalPages = document.querySelectorAll('.page-checkbox').length;
+        const totalPages = @(Model.Pages?.Count ?? 0);
 
         function updateSummary() {
-            const checkboxes = document.querySelectorAll('.page-checkbox:checked');
-            selectedCount = checkboxes.length;
-            document.getElementById('pageCount').innerText = selectedCount;
-        
-            // Update storage usage (mock calculation: 5MB per page)
-            const storageUsed = selectedCount * 5;
-            const maxStorage = 500;
-            const percentage = Math.min((storageUsed / maxStorage) * 100, 100);
-            document.getElementById('storageUsed').innerText = storageUsed + ' MB';
-            document.getElementById('storageBar').style.width = percentage + '%';
+            const checked = document.querySelectorAll('.page-checkbox:checked').length;
+            document.getElementById('selectedCount').innerText = checked;
+            const pct = totalPages > 0 ? (checked / totalPages) * 100 : 0;
+            document.getElementById('progressBar').style.width = pct + '%';
+
+            const selectAll = document.getElementById('selectAllPages');
+            if (selectAll) {
+                selectAll.checked = checked === totalPages;
+                selectAll.indeterminate = checked > 0 && checked < totalPages;
+            }
         }
 
-        function toggleSection(sectionId, isChecked) {
-            const checkboxes = document.querySelectorAll(`.page-checkbox[data-section="${sectionId}"]`);
-            checkboxes.forEach(cb => cb.checked = isChecked);
+        function selectAllToggle(isChecked) {
+            document.querySelectorAll('.page-checkbox').forEach(cb => cb.checked = isChecked);
             updateSummary();
         }
 
         function selectAllPages() {
-            const checkboxes = document.querySelectorAll('.page-checkbox');
-            checkboxes.forEach(cb => cb.checked = true);
+            document.querySelectorAll('.page-checkbox').forEach(cb => cb.checked = true);
             updateSummary();
         }
 
         function deselectAllPages() {
-            const checkboxes = document.querySelectorAll('.page-checkbox');
-            checkboxes.forEach(cb => cb.checked = false);
+            document.querySelectorAll('.page-checkbox').forEach(cb => cb.checked = false);
             updateSummary();
         }
 
-        function loadBasicPlan() {
-            deselectAllPages();
-            // Basic plan pages
-            const basicPages = ['dashboard_overview', 'leads_management', 'invoices', 'products', 'employees', 'company_settings'];
-            basicPages.forEach(pageValue => {
-                const checkbox = document.querySelector(`.page-checkbox[value="${pageValue}"]`);
-                if (checkbox) checkbox.checked = true;
-            });
-            updateSummary();
-            document.getElementById('tierSelect').value = 'basic';
+        function resetAll() {
+            if (confirm('Reset all selections?')) deselectAllPages();
         }
 
-        function loadProfessionalPlan() {
-            deselectAllPages();
-            const professionalPages = [
-                'dashboard_overview', 'analytics_reports', 'leads_management', 'opportunities', 'quotations',
-                'invoices', 'payments', 'products', 'stock_management', 'employees', 'attendance',
-                'general_ledger', 'expenses', 'company_settings', 'user_roles', 'support_tickets'
-            ];
-            professionalPages.forEach(pageValue => {
-                const checkbox = document.querySelector(`.page-checkbox[value="${pageValue}"]`);
-                if (checkbox) checkbox.checked = true;
-            });
-            updateSummary();
-            document.getElementById('tierSelect').value = 'professional';
-        }
-
-        function loadEnterprisePlan() {
-            selectAllPages();
-            document.getElementById('tierSelect').value = 'enterprise';
-        }
-
-        function loadClientAllowances() {
+        async function saveAllowances() {
             const clientId = document.getElementById('clientSelect').value;
-            if (clientId) {
-                // Simulate loading client-specific allowances
-                loadProfessionalPlan();
-                document.getElementById('tierSelect').value = '';
-                showToast('Client allowances loaded', 'success');
+            if (!clientId) {
+                showToast('Please select a client first.', 'error');
+                return;
             }
-        }
 
-        function loadTierAllowances() {
-            const tier = document.getElementById('tierSelect').value;
-            if (tier === 'basic') loadBasicPlan();
-            else if (tier === 'professional') loadProfessionalPlan();
-            else if (tier === 'enterprise') loadEnterprisePlan();
-            else if (tier === 'custom') showToast('Custom mode enabled - select pages manually', 'info');
-        }
+            const pageIds = [...document.querySelectorAll('.page-checkbox:checked')]
+                .map(cb => parseInt(cb.value));
 
-        function resetToDefault() {
-            if (confirm('Reset all allowances to default settings?')) {
-                loadBasicPlan();
-                document.getElementById('clientSelect').value = '';
-                document.getElementById('tierSelect').value = 'basic';
-                showToast('Reset to default settings', 'info');
+            const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+
+            try {
+                const res = await fetch('/ERPSettings/SaveAllowances', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': token
+                    },
+                    body: JSON.stringify({ clientId: parseInt(clientId), pageIds })
+                });
+                const data = await res.json();
+                showToast(data.message, data.success ? 'success' : 'error');
+            } catch {
+                showToast('Something went wrong.', 'error');
             }
-        }
-
-        function saveAllowances() {
-            const selectedPages = [];
-            document.querySelectorAll('.page-checkbox:checked').forEach(cb => {
-                selectedPages.push(cb.value);
-            });
-        
-            console.log('Saving allowances:', selectedPages);
-            showToast(`Saved ${selectedPages.length} page allowances successfully!`, 'success');
-        
-            // Here you would submit via AJAX or form post
-            // document.getElementById('pageAllowancesForm').submit();
         }
 
         function showToast(message, type = 'success') {
-            // Simple toast notification
+            const colors = { success: 'bg-green-600', error: 'bg-red-600', info: 'bg-blue-600' };
             const toast = document.createElement('div');
-            toast.className = `fixed bottom-4 right-4 z-50 px-4 py-3 rounded-lg text-white text-sm ${type === 'success' ? 'bg-green-600' : 'bg-blue-600'} shadow-lg transition-all duration-300 transform translate-y-0`;
+            toast.className = `fixed bottom-4 right-4 z-50 px-4 py-3 rounded-lg text-white text-sm ${colors[type]} shadow-lg transition-opacity duration-300`;
             toast.innerText = message;
             document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
-        // Attach event listeners to all checkboxes
+        document.getElementById('clientSelect').addEventListener('change', function () {
+            if (this.value) window.location.href = '?clientId=' + this.value;
+        });
+
         document.querySelectorAll('.page-checkbox').forEach(cb => {
             cb.addEventListener('change', updateSummary);
         });
 
-        // Initial update
         updateSummary();
     </script>
 }

@@ -9,6 +9,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IClientLeadRepository, ClientLeadRepository>();
+builder.Services.AddScoped<IPagesFieldAllowanceRepository, PagesFieldAllowanceRepository>();
 
 var connectionString = builder.Configuration.GetConnectionString("dbcs");
 

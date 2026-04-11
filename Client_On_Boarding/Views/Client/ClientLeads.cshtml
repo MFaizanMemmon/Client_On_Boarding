@@ -101,7 +101,7 @@
                 </tr>
             </thead>
             <tbody id="leadsBody" class="whitespace-nowrap divide-y divide-gray-100">
-                @foreach (var leads in Model.ClientLeads)
+                @foreach (var leads in Model.ClientLeads ?? Enumerable.Empty<ClientLead>())
                 {
                    
                         string fullName = leads.ClientName ?? "";

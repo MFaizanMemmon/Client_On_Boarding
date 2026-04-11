@@ -2,6 +2,6 @@
 {
     public class LeadPriority : BaseEntity
     {
-        public string PriorityName { get; set; }
+        public string PriorityName { get; set; } = string.Empty;
     }
 }

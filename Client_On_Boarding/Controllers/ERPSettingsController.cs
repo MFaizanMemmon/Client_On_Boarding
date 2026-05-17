@@ -54,9 +54,28 @@ namespace Client_On_Boarding.Controllers
         }
 
 
-        public IActionResult PageFieldAllowance()
+        public async Task<IActionResult> PageFieldAllowance(int? ClientId)
         {
-            return View();
+            PageFieldAllowanceVM vm = new PageFieldAllowanceVM();
+
+            var clients = await _clientLeadRepository.GetAllAsync();
+
+            vm.ClientDropdown = clients.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.ClientName
+            }).ToList();
+
+            if (clients != null)
+            {
+                vm.SelectedClientId = ClientId;
+            
+              
+
+            }
+
+
+            return View(vm);
         }
 
         public IActionResult ClientERPSettings()

@@ -10,5 +10,8 @@ namespace Client_On_Boarding.DTO
         public List<Pages>? Pages { get; set; }
         public List<SelectListItem> ClientDropdown { get; set; } = new List<SelectListItem>();
         public List<int> AllowedPageIds { get; set; } = new List<int>();
+
+        public List<ClientPageAllowance>? PageAllowance { get; set; }
+        public List<PagesFieldSettings>? AllowPageFields { get; set; }
     }
 }

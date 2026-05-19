@@ -1,17 +1,33 @@
-﻿@{
+﻿@model Client_On_Boarding.DTO.DashboardVM
+@{
     ViewData["Title"] = "Dashboard";
+}
+@{
+    var grossPercent = Model.GrossMonthlyPercent ?? 0;
+    var percentClass = grossPercent >= 0
+        ? "bg-green-100 text-green-700"
+        : "bg-red-100 text-red-700";
+
+    var sign = grossPercent > 0 ? "+" : "";
+
+    var ActiveOnBoarding = Model.ActiveOnBoarding;
 }
 
 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+   
+
     <div class="bg-blue-50 rounded-xl p-5">
         <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Client Leads</p>
-        <p class="text-3xl font-semibold text-gray-800">156</p>
-        <span class="inline-block mt-2 text-xs font-medium bg-green-100 text-green-700 px-2 py-0.5 rounded">+12% this month</span>
+        <p class="text-3xl font-semibold text-gray-800">@Model.TotalClientLead</p>
+
+        <span class="inline-block mt-2 text-xs font-medium @percentClass px-2 py-0.5 rounded">
+            @sign@grossPercent.ToString("0.##")% this month
+        </span>
     </div>
     <div class="bg-blue-50 rounded-xl p-5">
         <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Active Onboarding</p>
-        <p class="text-3xl font-semibold text-gray-800">89</p>
-        <span class="inline-block mt-2 text-xs font-medium bg-blue-100 text-blue-700 px-2 py-0.5 rounded">24 in progress</span>
+        <p class="text-3xl font-semibold text-gray-800">@ActiveOnBoarding</p>
+        <span class="inline-block mt-2 text-xs font-medium bg-blue-100 text-blue-700 px-2 py-0.5 rounded">@Model.Followup Follow-up</span>
     </div>
     <div class="bg-blue-50 rounded-xl p-5">
         <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Total Receivable</p>
@@ -20,8 +36,8 @@
     </div>
     <div class="bg-blue-50 rounded-xl p-5">
         <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Business Types</p>
-        <p class="text-3xl font-semibold text-gray-800">47</p>
-        <span class="inline-block mt-2 text-xs font-medium bg-amber-100 text-amber-700 px-2 py-0.5 rounded">Wheat Industry (28)</span>
+        <p class="text-3xl font-semibold text-gray-800">@Model.BusinessType</p>
+        <span class="inline-block mt-2 text-xs font-medium bg-amber-100 text-amber-700 px-2 py-0.5 rounded">@Model.Top1BusinessTypeName (28)</span>
     </div>
 </div>
 
@@ -224,7 +240,7 @@
         new Chart(document.getElementById('onboardingChart'), {
         type: 'doughnut',
         data: {
-        labels: ['Pending', 'In Progress', 'Completed', 'Rejected'],
+        labels: ['Pending', 'Follow-up', 'Completed', 'Rejected'],
         datasets: [{ data: [18, 24, 63, 5], backgroundColor: ['#ef4444', '#378add', '#1d9e75', '#9ca3af'], borderWidth: 0, hoverOffset: 4 }]
         },
         options: {

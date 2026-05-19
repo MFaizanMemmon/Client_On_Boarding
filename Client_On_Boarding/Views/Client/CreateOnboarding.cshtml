@@ -43,7 +43,9 @@
                             <label class="block text-xs font-medium text-gray-600 mb-1.5">Select Lead <span class="text-red-500">*</span></label>
                             <select asp-for="@Model.ClientLead.Id" asp-items="Model.ClientDropdown" name="LeadId" id="leadSelect" onchange="populateLead(this)"
                                     class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all text-gray-600">
-                            </select>
+                            
+                                    <option value="0">Select Lead</option>
+                                </select>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1.5">Client Name <span class="text-red-500">*</span></label>
@@ -83,97 +85,83 @@
                         <label class="block text-xs font-medium text-gray-600 mb-3">Select Plan <span class="text-red-500">*</span></label>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="planCards">
 
-                            @* Starter *@
-                            <div class="plan-card cursor-pointer border-2 border-gray-200 rounded-xl p-4 hover:border-gray-300 transition-all h-full"
-                                 data-plan="starter" data-price="49" onclick="selectPlan(this)">
-                                <input type="radio" name="Plan" value="starter" class="hidden" />
+                            @* Starter - Default Selected *@
+                            <div class="plan-card plan-card--active cursor-pointer border-2 border-blue-500 bg-blue-50 rounded-xl p-4 hover:border-blue-600 transition-all h-full"
+                                 data-plan="starter" data-price="1500" onclick="selectPlan(this)">
+                                <input type="radio" name="Plan" value="starter" class="hidden" checked />
+
                                 <div class="flex items-center justify-between mb-3">
-                                    <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide plan-label">Starter</span>
-                                    <div class="plan-dot w-4 h-4 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all">
-                                        <div class="plan-dot-inner w-1.5 h-1.5 rounded-full bg-white scale-0 transition-transform"></div>
+                                    <span class="text-xs font-semibold text-blue-600 uppercase tracking-wide plan-label">Starter</span>
+                                    <div class="plan-dot w-4 h-4 rounded-full border-2 border-blue-500 bg-blue-500 flex items-center justify-center transition-all">
+                                        <div class="plan-dot-inner w-1.5 h-1.5 rounded-full bg-white scale-100 transition-transform"></div>
                                     </div>
                                 </div>
-                                <p class="text-2xl font-bold text-gray-800">$49<span class="text-sm font-normal text-gray-500">/mo</span></p>
+
+                                <p class="text-2xl font-bold text-gray-800">Rs 1,500<span class="text-sm font-normal text-gray-500">/mo</span></p>
+
                                 <ul class="mt-3 space-y-1.5 text-xs text-gray-500">
                                     <li class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 fill-green-500 flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                                        Up to 3 users
+                                        <svg class="w-3.5 h-3.5 fill-green-500 flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
+                                        1 user only
                                     </li>
                                     <li class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 fill-green-500 flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                        <svg class="w-3.5 h-3.5 fill-green-500 flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
                                         Inventory module
                                     </li>
                                     <li class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 fill-green-500 flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                        <svg class="w-3.5 h-3.5 fill-green-500 flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
                                         Basic reports
                                     </li>
                                     <li class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 fill-gray-300 flex-shrink-0" viewBox="0 0 24 24"><path d="M18.3 5.71L12 12.01 5.7 5.71 4.29 7.12 10.59 13.42 4.29 19.72 5.7 21.13 12 14.83 18.3 21.13 19.71 19.72 13.41 13.42 19.71 7.12z"/></svg>
+                                        <svg class="w-3.5 h-3.5 fill-gray-300 flex-shrink-0" viewBox="0 0 24 24"><path d="M18.3 5.71L12 12.01 5.7 5.71 4.29 7.12 10.59 13.42 4.29 19.72 5.7 21.13 12 14.83 18.3 21.13 19.71 19.72 13.41 13.42 19.71 7.12z" /></svg>
                                         <span class="text-gray-400">Multi-branch</span>
                                     </li>
                                 </ul>
                             </div>
 
-                            @* Professional (default selected) *@
-                            <div class="plan-card plan-card--active cursor-pointer border-2 border-blue-500 bg-blue-50 rounded-xl p-4 hover:border-blue-600 transition-all h-full relative"
-                                 data-plan="professional" data-price="99" onclick="selectPlan(this)">
-                               
-                                <input type="radio" name="Plan" value="professional" class="hidden" checked />
-                                <div class="flex items-center justify-between mb-3">
-                                    <span class="text-xs font-semibold text-blue-600 uppercase tracking-wide plan-label">Professional</span>
-                                    <div class="plan-dot w-4 h-4 rounded-full border-2 border-blue-500 bg-blue-500 flex items-center justify-center transition-all">
-                                        <div class="plan-dot-inner w-1.5 h-1.5 rounded-full bg-white scale-100 transition-transform"></div>
-                                    </div>
-                                </div>
-                                <p class="text-2xl font-bold text-gray-800">$99<span class="text-sm font-normal text-gray-500">/mo</span></p>
-                                <ul class="mt-3 space-y-1.5 text-xs text-gray-600">
-                                    <li class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 fill-green-500 flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                                        Up to 10 users
-                                    </li>
-                                    <li class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 fill-green-500 flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                                        All modules
-                                    </li>
-                                    <li class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 fill-green-500 flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                                        Advanced reports
-                                    </li>
-                                    <li class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 fill-green-500 flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                                        Multi-branch
-                                    </li>
-                                </ul>
-                            </div>
+                            @* Professional - Disabled *@
+                            <div class="plan-card cursor-not-allowed border-2 border-gray-200 bg-gray-100 opacity-60 rounded-xl p-4 transition-all h-full relative"
+                                 data-plan="professional" data-price="3000">
 
-                            @* Enterprise *@
-                            <div class="plan-card cursor-pointer border-2 border-gray-200 rounded-xl p-4 hover:border-gray-300 transition-all h-full"
-                                 data-plan="enterprise" data-price="199" onclick="selectPlan(this)">
-                                <input type="radio" name="Plan" value="enterprise" class="hidden" />
+                                <input type="radio" name="Plan" value="professional" class="hidden" disabled />
+
                                 <div class="flex items-center justify-between mb-3">
-                                    <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide plan-label">Enterprise</span>
+                                    <span class="text-xs font-semibold text-gray-400 uppercase tracking-wide plan-label">Professional</span>
                                     <div class="plan-dot w-4 h-4 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all">
                                         <div class="plan-dot-inner w-1.5 h-1.5 rounded-full bg-white scale-0 transition-transform"></div>
                                     </div>
                                 </div>
-                                <p class="text-2xl font-bold text-gray-800">$199<span class="text-sm font-normal text-gray-500">/mo</span></p>
-                                <ul class="mt-3 space-y-1.5 text-xs text-gray-500">
-                                    <li class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 fill-green-500 flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                                        Unlimited users
-                                    </li>
-                                    <li class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 fill-green-500 flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                                        Custom modules
-                                    </li>
-                                    <li class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 fill-green-500 flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                                        Dedicated support
-                                    </li>
-                                    <li class="flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 fill-green-500 flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                                        On-site training
-                                    </li>
+
+                                <p class="text-2xl font-bold text-gray-500">Rs 3,000<span class="text-sm font-normal text-gray-400">/mo</span></p>
+
+                                <ul class="mt-3 space-y-1.5 text-xs text-gray-400">
+                                    <li class="flex items-center gap-1.5">Up to 10 users</li>
+                                    <li class="flex items-center gap-1.5">All modules</li>
+                                    <li class="flex items-center gap-1.5">Advanced reports</li>
+                                    <li class="flex items-center gap-1.5">Multi-branch</li>
+                                </ul>
+                            </div>
+
+                            @* Enterprise - Disabled *@
+                            <div class="plan-card cursor-not-allowed border-2 border-gray-200 bg-gray-100 opacity-60 rounded-xl p-4 transition-all h-full"
+                                 data-plan="enterprise" data-price="5000">
+
+                                <input type="radio" name="Plan" value="enterprise" class="hidden" disabled />
+
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-xs font-semibold text-gray-400 uppercase tracking-wide plan-label">Enterprise</span>
+                                    <div class="plan-dot w-4 h-4 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all">
+                                        <div class="plan-dot-inner w-1.5 h-1.5 rounded-full bg-white scale-0 transition-transform"></div>
+                                    </div>
+                                </div>
+
+                                <p class="text-2xl font-bold text-gray-500">Rs 5,000<span class="text-sm font-normal text-gray-400">/mo</span></p>
+
+                                <ul class="mt-3 space-y-1.5 text-xs text-gray-400">
+                                    <li class="flex items-center gap-1.5">Unlimited users</li>
+                                    <li class="flex items-center gap-1.5">Custom modules</li>
+                                    <li class="flex items-center gap-1.5">Dedicated support</li>
+                                    <li class="flex items-center gap-1.5">On-site training</li>
                                 </ul>
                             </div>
 
@@ -199,19 +187,28 @@
 
                     <div>
                         <label class="block text-xs font-medium text-gray-600 mb-2">ERP Modules Required</label>
+
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                             @{
                                 var modules = new[] {
-                                    "Admin", "Accounting","Warehouse",
-                                    "Order Booking", "HR & Payroll", 
- "Manufacturing"
+                                    "Admin", "Accounting", "Warehouse",
+                                    "Order Booking", "HR & Payroll",
+                                    "Manufacturing"
                                 };
                             }
+
                             @foreach (var mod in modules)
                             {
-                                <label class="flex items-center gap-2 cursor-pointer border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50 transition-colors">
-                                    <input type="checkbox" name="Modules" value="@mod"
+                                var isAccounting = mod == "Accounting";
+
+                                <label class="flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-2 transition-colors
+                                    @(isAccounting ? "cursor-pointer hover:bg-gray-50" : "cursor-not-allowed bg-gray-100 opacity-60")">
+                                    <input type="checkbox"
+                                           name="Modules"
+                                           value="@mod"
+                                    @(isAccounting ? "" : "disabled")
                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-400 w-3.5 h-3.5" />
+
                                     <span class="text-xs text-gray-700">@mod</span>
                                 </label>
                             }
@@ -256,11 +253,7 @@
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1.5">Number of Users <span class="text-red-500">*</span></label>
-                        <input type="number" name="UserCount" min="1" max="999" placeholder="e.g. 5"
-                               class="w-full sm:w-40 text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all placeholder-gray-400" />
-                    </div>
+                 
                 </div>
             </div>
 
@@ -293,7 +286,7 @@
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-500">Setup Fee</span>
-                        <span class="font-medium text-gray-800">$0.00</span>
+                        <span class="font-medium text-gray-800">Rs 0.00</span>
                     </div>
                     <hr class="border-gray-100" />
                     <div class="flex justify-between">
@@ -302,7 +295,27 @@
                     </div>
                 </div>
             </div>
+            @* Status *@
+            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div class="px-5 py-4 border-b border-gray-100 bg-gray-50">
+                    <h2 class="text-sm font-semibold text-gray-700">Status</h2>
+                </div>
 
+                <div class="px-5 py-5">
+                    <label class="block text-xs font-medium text-gray-600 mb-1.5">
+                        Onboarding Status <span class="text-red-500">*</span>
+                    </label>
+
+                    <select name="Status" id="status"
+                            class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all text-gray-600">
+                        <option value="Pending" selected>Pending</option>
+                        <option value="InProgress">In Progress</option>
+                        <option value="Active">Active</option>
+                        <option value="OnHold">On Hold</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+            </div>
             @* Internal Notes *@
             <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
                 <div class="px-5 py-4 border-b border-gray-100 bg-gray-50">
@@ -339,9 +352,9 @@
 
     /* ── Plan data ── */
     const PLANS = {
-        starter:      { label: 'Starter',      price: 49  },
-        professional: { label: 'Professional', price: 99  },
-        enterprise:   { label: 'Enterprise',   price: 199 }
+        starter:      { label: 'Starter',      price: 1500  },
+        professional: { label: 'Professional', price: 3000  },
+        enterprise:   { label: 'Enterprise',   price: 5000 }
     };
 
     /* ── Discount map ── */
@@ -407,12 +420,12 @@
         const total     = basePrice - discAmt;
 
         document.getElementById('summaryPlan').textContent     = plan.label;
-        document.getElementById('summaryPrice').textContent    = '$' + basePrice.toFixed(2);
+        document.getElementById('summaryPrice').textContent    = 'Rs ' + basePrice.toFixed(2);
         document.getElementById('summaryCycle').textContent    = capitalize(activeCycle);
         document.getElementById('summaryDiscount').textContent = cycle.pct > 0
-            ? `-$${discAmt.toFixed(2)} (${cycle.label})`
+            ? `-Rs ${discAmt.toFixed(2)} (${cycle.label})`
             : '–';
-        document.getElementById('summaryTotal').textContent    = '$' + total.toFixed(2);
+        document.getElementById('summaryTotal').textContent    = 'Rs ' + total.toFixed(2);
     }
 
     function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }

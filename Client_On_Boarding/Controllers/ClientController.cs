@@ -3,6 +3,7 @@ using Client_On_Boarding.Models;
 using Client_On_Boarding.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Client_On_Boarding.Controllers
 {
@@ -15,17 +16,18 @@ namespace Client_On_Boarding.Controllers
             _ClientLeadrepo = ClientLeadrepo;
         }
 
-
-
         public async Task<IActionResult> ClientLeads()
         {
             ClientLeadVM vm = new ClientLeadVM();
-            vm.ClientLeads = (await _ClientLeadrepo.GetAllWithRelationsAsync()).ToList();
+
+            vm.ClientLeads = (await _ClientLeadrepo.GetAllWithRelationsAsync())
+                .Where(x => x.LeadStatusID == 1)
+                .ToList();
 
             var statuses = await _ClientLeadrepo.GetLeadStatusesAsync();
-            var sources = await _ClientLeadrepo.GetLeadSourcesAsync(); 
+            var sources = await _ClientLeadrepo.GetLeadSourcesAsync();
 
-            vm.StatusDropdown = statuses.Select(x=> new SelectListItem
+            vm.StatusDropdown = statuses.Select(x => new SelectListItem
             {
                 Text = x.StatusName,
                 Value = x.Id.ToString()
@@ -84,24 +86,68 @@ namespace Client_On_Boarding.Controllers
             return RedirectToAction("ClientLeads");
         }
 
-        public IActionResult ClientOnboarding()
+        public async Task<IActionResult> ClientOnboarding()
         {
-            return View();
+            ClientLeadVM vm = new ClientLeadVM();
+
+            var clientLeads = await _ClientLeadrepo.GetAllWithRelationsAsync();
+
+            vm.ClientLeads = clientLeads
+                .Where(x => x.LeadStatusID != 1)
+                .ToList();
+
+            return View(vm);
         }
 
-        public async Task<IActionResult> CreateOnboarding()
+        [HttpGet]
+        public async Task<IActionResult> CreateOnboarding(int? clientId)
         {
-            ClientLeadVM model = new ClientLeadVM();
-            var clients = await _ClientLeadrepo.GetAllAsync();
+            var model = new ClientOnBoardingVM();
 
-            model.ClientDropdown = clients.Select(x => new SelectListItem
+            await LoadCreateOnboardingDropdowns(model);
+
+            if (clientId.HasValue)
             {
-                Value = x.Id.ToString(),
-                Text = x.ClientName
-            });
+                model.ClientId = clientId.Value;
+                model.ClientLeadDetail = await _ClientLeadrepo.GetByIdWithRelationsAsync(clientId.Value);
+            }
 
             return View(model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateOnboarding(ClientOnBoardingVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                await LoadCreateOnboardingDropdowns(model);
+
+                if (model.ClientId > 0)
+                {
+                    model.ClientLeadDetail = await _ClientLeadrepo.GetByIdWithRelationsAsync(Convert.ToInt32(model.ClientId));
+                }
+
+                return View(model);
+            }
+
+            var clientLead = await _ClientLeadrepo.GetByIdAsync(Convert.ToInt32(model.ClientId));
+
+            if (clientLead == null)
+            {
+                return NotFound();
+            }
+
+            clientLead.InternalNotes = model.ClientLeadDetail.InternalNotes;
+            clientLead.LeadStatusID = model.StatusId;
+            clientLead.UserName = model.ClientLeadDetail.UserName;
+            clientLead.Password = model.ClientLeadDetail.Password;
+
+            await _ClientLeadrepo.SaveAsync();
+
+            return RedirectToAction("ClientOnboarding", "Client");
+        }
+
 
 
         // ── Helpers ────────────────────────────────────────────────────
@@ -142,6 +188,30 @@ namespace Client_On_Boarding.Controllers
                 Value = x.Id.ToString(),
                 Text = x.PriorityName
             });
+        }
+
+        private async Task LoadCreateOnboardingDropdowns(ClientOnBoardingVM model)
+        {
+            var clientLeads = await _ClientLeadrepo.GetAllAsync();
+            var statuses = await _ClientLeadrepo.GetLeadStatusesAsync();
+
+            model.ClientLeads = clientLeads
+                .Where(x => x.LeadStatusID == 1)
+                .Select(x => new SelectListItem
+                {
+                    Text = x.CompanyName,
+                    Value = x.Id.ToString()
+                })
+                .ToList();
+
+            model.StatusDropdown = statuses
+                .Where(x => x.Id != 1)
+                .Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = x.StatusName
+                })
+                .ToList();
         }
 
     }

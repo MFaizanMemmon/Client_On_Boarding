@@ -1,5 +1,5 @@
 ﻿@using Client_On_Boarding.DTO
-@model ClientLeadVM
+@model ClientOnBoardingVM
 @{
     ViewData["Title"] = "Create Onboarding";
 }
@@ -19,7 +19,7 @@
     </div>
 </div>
 
-<form id="onboardingForm" method="post" enctype="multipart/form-data">
+<form id="onboardingForm" asp-controller="Client" asp-action="CreateOnBoarding" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
 
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
@@ -32,7 +32,7 @@
                 <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gray-50">
                     <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-blue-600" viewBox="0 0 512 512">
-                            <path d="M437.02 74.98C388.668 26.63 324.379 0 256 0S123.332 26.629 74.98 74.98C26.63 123.332 0 187.621 0 256s26.629 132.668 74.98 181.02C123.332 485.37 187.621 512 256 512s132.668-26.629 181.02-74.98C485.37 388.668 512 324.379 512 256s-26.629-132.668-74.98-181.02zM111.105 429.297c8.454-72.735 70.989-128.89 144.895-128.89 38.96 0 75.598 15.179 103.156 42.734 23.281 23.285 37.965 53.687 41.742 86.152C361.641 462.172 311.094 482 256 482s-105.637-19.824-144.895-52.703zM256 269.507c-42.871 0-77.754-34.882-77.754-77.753C178.246 148.879 213.13 114 256 114s77.754 34.879 77.754 77.754c0 42.871-34.883 77.754-77.754 77.754z"/>
+                            <path d="M437.02 74.98C388.668 26.63 324.379 0 256 0S123.332 26.629 74.98 74.98C26.63 123.332 0 187.621 0 256s26.629 132.668 74.98 181.02C123.332 485.37 187.621 512 256 512s132.668-26.629 181.02-74.98C485.37 388.668 512 324.379 512 256s-26.629-132.668-74.98-181.02zM111.105 429.297c8.454-72.735 70.989-128.89 144.895-128.89 38.96 0 75.598 15.179 103.156 42.734 23.281 23.285 37.965 53.687 41.742 86.152C361.641 462.172 311.094 482 256 482s-105.637-19.824-144.895-52.703zM256 269.507c-42.871 0-77.754-34.882-77.754-77.753C178.246 148.879 213.13 114 256 114s77.754 34.879 77.754 77.754c0 42.871-34.883 77.754-77.754 77.754z" />
                         </svg>
                     </div>
                     <h2 class="text-sm font-semibold text-gray-700">Client Information</h2>
@@ -41,27 +41,31 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1.5">Select Lead <span class="text-red-500">*</span></label>
-                            <select asp-for="@Model.ClientLead.Id" asp-items="Model.ClientDropdown" name="LeadId" id="leadSelect" onchange="populateLead(this)"
+                            <select asp-for="ClientId"
+                                    asp-items="Model.ClientLeads"
+                                    id="leadSelect"
+                                    onchange="populateLead(this)"
                                     class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all text-gray-600">
-                            
-                                    <option value="0">Select Lead</option>
-                                </select>
+                                <option value="">Select Lead</option>
+                            </select>
+
+                            <span asp-validation-for="ClientId" class="text-xs text-red-500"></span>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1.5">Client Name <span class="text-red-500">*</span></label>
-                            <input type="text" name="ClientName" id="clientName" placeholder="Auto-filled from lead"
+                            <input asp-for="@Model.ClientLeadDetail.ClientName" placeholder="Auto-filled from lead"
                                    class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all placeholder-gray-400 bg-gray-50" readonly />
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Company Name</label>
-                            <input type="text" name="CompanyName" id="clientCompany" placeholder="Auto-filled from lead"
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">Industry</label>
+                            <input asp-for="@Model.ClientLeadDetail.Industry.IndustryName" placeholder="Auto-filled from lead"
                                    class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all placeholder-gray-400 bg-gray-50" readonly />
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1.5">Phone</label>
-                            <input type="tel" name="ClientPhone" id="clientPhone" placeholder="Auto-filled from lead"
+                            <input asp-for="@Model.ClientLeadDetail.PhoneNo" placeholder="Auto-filled from lead"
                                    class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all placeholder-gray-400 bg-gray-50" readonly />
                         </div>
                     </div>
@@ -73,7 +77,7 @@
                 <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gray-50">
                     <div class="w-7 h-7 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-green-600" viewBox="0 0 64 64">
-                            <path d="M32.667 5.11A25.116 25.116 0 0 0 32 5.045V2.88a2.08 2.08 0 1 0-4.16 0v2.165C15.027 6.102 4.96 16.837 4.96 29.92v18.5L3.47 52.8h-.59a2.08 2.08 0 1 0 0 4.16h54.08a2.08 2.08 0 1 0 0-4.16h-.59l-1.49-4.38v-9.568a18.585 18.585 0 0 1-4.16 1.209v8.703a2.08 2.08 0 0 0 .11.67l1.145 3.366H7.865l1.144-3.366a2.08 2.08 0 0 0 .111-.67V29.92c0-11.488 9.312-20.8 20.8-20.8.142 0 .285.001.426.004a18.7 18.7 0 0 1 2.32-4.014zM23.68 61.12a2.08 2.08 0 0 1 2.08-2.08h8.32a2.08 2.08 0 1 1 0 4.16h-8.32a2.08 2.08 0 0 1-2.08-2.08z"/>
+                            <path d="M32.667 5.11A25.116 25.116 0 0 0 32 5.045V2.88a2.08 2.08 0 1 0-4.16 0v2.165C15.027 6.102 4.96 16.837 4.96 29.92v18.5L3.47 52.8h-.59a2.08 2.08 0 1 0 0 4.16h54.08a2.08 2.08 0 1 0 0-4.16h-.59l-1.49-4.38v-9.568a18.585 18.585 0 0 1-4.16 1.209v8.703a2.08 2.08 0 0 0 .11.67l1.145 3.366H7.865l1.144-3.366a2.08 2.08 0 0 0 .111-.67V29.92c0-11.488 9.312-20.8 20.8-20.8.142 0 .285.001.426.004a18.7 18.7 0 0 1 2.32-4.014zM23.68 61.12a2.08 2.08 0 0 1 2.08-2.08h8.32a2.08 2.08 0 1 1 0 4.16h-8.32a2.08 2.08 0 0 1-2.08-2.08z" />
                         </svg>
                     </div>
                     <h2 class="text-sm font-semibold text-gray-700">ERP Subscription Plan</h2>
@@ -196,17 +200,18 @@
                                     "Manufacturing"
                                 };
                             }
-
                             @foreach (var mod in modules)
                             {
                                 var isAccounting = mod == "Accounting";
 
                                 <label class="flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-2 transition-colors
                                     @(isAccounting ? "cursor-pointer hover:bg-gray-50" : "cursor-not-allowed bg-gray-100 opacity-60")">
+
                                     <input type="checkbox"
                                            name="Modules"
                                            value="@mod"
-                                    @(isAccounting ? "" : "disabled")
+                                           disabled="@(!isAccounting)"
+                                           checked="@(isAccounting)"
                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-400 w-3.5 h-3.5" />
 
                                     <span class="text-xs text-gray-700">@mod</span>
@@ -223,7 +228,7 @@
                 <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gray-50">
                     <div class="w-7 h-7 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-purple-600" viewBox="0 0 24 24">
-                            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
                         </svg>
                     </div>
                     <h2 class="text-sm font-semibold text-gray-700">ERP Access Credentials</h2>
@@ -231,21 +236,28 @@
                 <div class="px-6 py-5 space-y-4">
                     <div class="bg-amber-50 border border-amber-100 rounded-lg px-4 py-3 flex items-start gap-3">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-amber-500 flex-shrink-0 mt-0.5" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                         </svg>
                         <p class="text-xs text-amber-700">These credentials will be emailed to the client upon activation. They can be changed after first login.</p>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1.5">ERP Username <span class="text-red-500">*</span></label>
-                            <input type="text" name="ErpUsername" placeholder="e.g. ahmed.nexova"
+                            <input asp-for="ClientLeadDetail.UserName"
+                                   placeholder="e.g. ahmed.nexova"
                                    class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all placeholder-gray-400" />
+
+                            <span asp-validation-for="ClientLeadDetail.UserName" class="text-xs text-red-500"></span>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-600 mb-1.5">Temporary Password <span class="text-red-500">*</span></label>
                             <div class="relative">
-                                <input type="text" name="TempPassword" id="tempPassword" placeholder="Auto-generate or enter"
+                                <input asp-for="ClientLeadDetail.Password"
+                                       id="tempPassword"
+                                       placeholder="Auto-generate or enter"
                                        class="w-full text-sm border border-gray-200 rounded-lg px-3 pr-24 py-2.5 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all placeholder-gray-400" />
+
+                                <span asp-validation-for="ClientLeadDetail.Password" class="text-xs text-red-500"></span>
                                 <button type="button" onclick="generatePassword()"
                                         class="absolute inset-y-0 right-0 px-3 text-xs font-medium text-blue-600 hover:text-blue-700 border-l border-gray-200 transition-colors">
                                     Generate
@@ -253,7 +265,7 @@
                             </div>
                         </div>
                     </div>
-                 
+
                 </div>
             </div>
 
@@ -270,7 +282,7 @@
                 <div class="px-5 py-5 space-y-3">
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-500">Plan</span>
-                        <span class="font-medium text-gray-800" id="summaryPlan">Professional</span>
+                        <span class="font-medium text-gray-800" id="summaryPlan">Starter</span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-500">Base Price</span>
@@ -306,14 +318,13 @@
                         Onboarding Status <span class="text-red-500">*</span>
                     </label>
 
-                    <select name="Status" id="status"
+                    <select asp-for="StatusId"
+                            asp-items="Model.StatusDropdown"
                             class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 transition-all text-gray-600">
-                        <option value="Pending" selected>Pending</option>
-                        <option value="InProgress">In Progress</option>
-                        <option value="Active">Active</option>
-                        <option value="OnHold">On Hold</option>
-                        <option value="Cancelled">Cancelled</option>
+                        <option value="">Select Status</option>
                     </select>
+
+                    <span asp-validation-for="StatusId" class="text-xs text-red-500"></span>
                 </div>
             </div>
             @* Internal Notes *@
@@ -322,8 +333,12 @@
                     <h2 class="text-sm font-semibold text-gray-700">Internal Notes</h2>
                 </div>
                 <div class="px-5 py-5">
-                    <textarea name="Notes" rows="3" placeholder="Any notes for the onboarding team..."
+                    <textarea asp-for="ClientLeadDetail.InternalNotes"
+                              rows="3"
+                              placeholder="Any notes for the onboarding team..."
                               class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-blue-400 transition-all resize-none placeholder-gray-400"></textarea>
+
+                    <span asp-validation-for="ClientLeadDetail.InternalNotes" class="text-xs text-red-500"></span>
                 </div>
             </div>
 
@@ -347,111 +362,117 @@
 </form>
 
 @section Scripts {
-<script>
-(function () {
+    <script>
+        function populateLead(select) {
+            var clientId = select.value;
 
-    /* ── Plan data ── */
-    const PLANS = {
-        starter:      { label: 'Starter',      price: 1500  },
-        professional: { label: 'Professional', price: 3000  },
-        enterprise:   { label: 'Enterprise',   price: 5000 }
-    };
+            if (clientId === "0" || clientId === "") {
+                window.location.href = '/Home/CreateOnboarding';
+                return;
+            }
 
-    /* ── Discount map ── */
-    const DISCOUNTS = {
-        monthly:   { label: 'None',  pct: 0    },
-        quarterly: { label: '5%',    pct: 0.05 },
-        annually:  { label: '15%',   pct: 0.15 }
-    };
+            window.location.href = '/Client/CreateOnboarding?clientId=' + clientId;
+        }
 
-    let activePlan  = 'professional';
-    let activeCycle = 'monthly';
+        (function () {
 
-    /* ── selectPlan: called from onclick on each card div ── */
-    window.selectPlan = function (card) {
-        const plan = card.dataset.plan;
-        if (plan === activePlan) return;
-        activePlan = plan;
+            /* ── Plan data ── */
+            const PLANS = {
+                starter: { label: 'Starter', price: 1500 },
+                professional: { label: 'Professional', price: 3000 },
+                enterprise: { label: 'Enterprise', price: 5000 }
+            };
 
-        /* Update all cards */
-        document.querySelectorAll('.plan-card').forEach(c => {
-            const isActive = c.dataset.plan === plan;
+            /* ── Discount map ── */
+            const DISCOUNTS = {
+                monthly: { label: 'None', pct: 0 },
+                quarterly: { label: '5%', pct: 0.05 },
+                annually: { label: '15%', pct: 0.15 }
+            };
 
-            /* Border / background */
-            c.classList.toggle('border-blue-500', isActive);
-            c.classList.toggle('bg-blue-50',      isActive);
-            c.classList.toggle('border-gray-200', !isActive);
-            c.classList.remove('hover:border-gray-300', 'hover:border-blue-600');
-            c.classList.add(isActive ? 'hover:border-blue-600' : 'hover:border-gray-300');
+            let activePlan = 'starter';
+            let activeCycle = 'monthly';
 
-            /* Label colour */
-            const lbl = c.querySelector('.plan-label');
-            lbl.classList.toggle('text-blue-600', isActive);
-            lbl.classList.toggle('text-gray-500',  !isActive);
+            /* ── selectPlan: called from onclick on each card div ── */
+            window.selectPlan = function (card) {
+                const plan = card.dataset.plan;
+                if (plan === activePlan) return;
+                activePlan = plan;
 
-            /* Radio dot */
-            const dot      = c.querySelector('.plan-dot');
-            const dotInner = c.querySelector('.plan-dot-inner');
-            dot.classList.toggle('border-blue-500', isActive);
-            dot.classList.toggle('bg-blue-500',     isActive);
-            dot.classList.toggle('border-gray-300', !isActive);
-            dot.classList.toggle('bg-transparent',  !isActive);
-            dotInner.style.transform = isActive ? 'scale(1)' : 'scale(0)';
+                /* Update all cards */
+                document.querySelectorAll('.plan-card').forEach(c => {
+                    const isActive = c.dataset.plan === plan;
 
-            /* Hidden radio input */
-            c.querySelector('input[type="radio"]').checked = isActive;
-        });
+                    /* Border / background */
+                    c.classList.toggle('border-blue-500', isActive);
+                    c.classList.toggle('bg-blue-50', isActive);
+                    c.classList.toggle('border-gray-200', !isActive);
+                    c.classList.remove('hover:border-gray-300', 'hover:border-blue-600');
+                    c.classList.add(isActive ? 'hover:border-blue-600' : 'hover:border-gray-300');
 
-        updateSummary();
-    };
+                    /* Label colour */
+                    const lbl = c.querySelector('.plan-label');
+                    lbl.classList.toggle('text-blue-600', isActive);
+                    lbl.classList.toggle('text-gray-500', !isActive);
 
-    /* ── Billing cycle change ── */
-    document.getElementById('billingCycle').addEventListener('change', function () {
-        activeCycle = this.value;
-        updateSummary();
-    });
+                    /* Radio dot */
+                    const dot = c.querySelector('.plan-dot');
+                    const dotInner = c.querySelector('.plan-dot-inner');
+                    dot.classList.toggle('border-blue-500', isActive);
+                    dot.classList.toggle('bg-blue-500', isActive);
+                    dot.classList.toggle('border-gray-300', !isActive);
+                    dot.classList.toggle('bg-transparent', !isActive);
+                    dotInner.style.transform = isActive ? 'scale(1)' : 'scale(0)';
 
-    /* ── Update pricing summary ── */
-    function updateSummary() {
-        const plan     = PLANS[activePlan];
-        const cycle    = DISCOUNTS[activeCycle];
-        const basePrice = plan.price;
-        const discAmt   = basePrice * cycle.pct;
-        const total     = basePrice - discAmt;
+                    /* Hidden radio input */
+                    c.querySelector('input[type="radio"]').checked = isActive;
+                });
 
-        document.getElementById('summaryPlan').textContent     = plan.label;
-        document.getElementById('summaryPrice').textContent    = 'Rs ' + basePrice.toFixed(2);
-        document.getElementById('summaryCycle').textContent    = capitalize(activeCycle);
-        document.getElementById('summaryDiscount').textContent = cycle.pct > 0
-            ? `-Rs ${discAmt.toFixed(2)} (${cycle.label})`
-            : '–';
-        document.getElementById('summaryTotal').textContent    = 'Rs ' + total.toFixed(2);
-    }
+                updateSummary();
+            };
 
-    function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+            /* ── Billing cycle change ── */
+            document.getElementById('billingCycle').addEventListener('change', function () {
+                activeCycle = this.value;
+                updateSummary();
+            });
 
-    /* ── Auto-fill lead ── */
-    window.populateLead = function (select) {
-        const opt = select.options[select.selectedIndex];
-        document.getElementById('clientName').value    = opt.dataset.name    || '';
-        document.getElementById('clientCompany').value = opt.dataset.company || '';
-        document.getElementById('clientPhone').value   = opt.dataset.phone   || '';
-    };
 
-    /* ── Password generator ── */
-    window.generatePassword = function () {
-        const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@@#$';
-        let pass = '';
-        for (let i = 0; i < 10; i++) pass += chars[Math.floor(Math.random() * chars.length)];
-        document.getElementById('tempPassword').value = pass;
-    };
+      
+            /* ── Update pricing summary ── */
+            function updateSummary() {
+                const plan = PLANS[activePlan];
+                const cycle = DISCOUNTS[activeCycle];
+                const basePrice = plan.price;
+                const discAmt = basePrice * cycle.pct;
+                const total = basePrice - discAmt;
 
-    /* ── Default start date ── */
-    document.querySelector('input[name="StartDate"]').valueAsDate = new Date();
+                document.getElementById('summaryPlan').textContent = plan.label;
+                document.getElementById('summaryPrice').textContent = 'Rs ' + basePrice.toFixed(2);
+                document.getElementById('summaryCycle').textContent = capitalize(activeCycle);
+                document.getElementById('summaryDiscount').textContent = cycle.pct > 0
+                    ? `-Rs ${discAmt.toFixed(2)} (${cycle.label})`
+                    : '–';
+                document.getElementById('summaryTotal').textContent = 'Rs ' + total.toFixed(2);
+            }
 
-    /* ── Init summary ── */
-    updateSummary();
+            function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
-})();
-</script>
+ 
+            /* ── Password generator ── */
+            window.generatePassword = function () {
+                const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@@#$';
+                let pass = '';
+                for (let i = 0; i < 10; i++) pass += chars[Math.floor(Math.random() * chars.length)];
+                document.getElementById('tempPassword').value = pass;
+            };
+
+            /* ── Default start date ── */
+            document.querySelector('input[name="StartDate"]').valueAsDate = new Date();
+
+            /* ── Init summary ── */
+            updateSummary();
+
+        })();
+    </script>
 }

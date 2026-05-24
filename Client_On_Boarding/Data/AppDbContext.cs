@@ -23,9 +23,22 @@ namespace Client_On_Boarding.Data
 
         public DbSet<ClientPageAllowance> ClientPageAllowances { get; set; }
 
+        public DbSet<BillingCycle> BillingCycle { get; set; }
+
+        public DbSet<ERPModules> ErpModules { get; set; }
+
+        public DbSet<SubscriptionPlain> SubscriptionPlain { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Decimal Property set size on subscritpion plain
+            modelBuilder.Entity<SubscriptionPlain>()
+                .Property(x => x.Amount)
+                .HasPrecision(18, 2);
+
+
 
             // ✅ Industry
             modelBuilder.Entity<BusinessIndustry>().HasData(
@@ -89,6 +102,24 @@ namespace Client_On_Boarding.Data
 
             );
 
+            // Billing Cycle
+            modelBuilder.Entity<BillingCycle>().HasData(
+                new BillingCycle { Id = 1, BillingName = "Monthly", DiscountPercentage = 0 },
+                new BillingCycle { Id = 2, BillingName = "Quarterly ", DiscountPercentage = 10 },
+                new BillingCycle { Id = 3, BillingName = "Yearly", DiscountPercentage = 25 }
+                );
+
+            // ERP Module
+            modelBuilder.Entity<ERPModules>().HasData(
+                new ERPModules { Id=1, ModuleName="Accounting"}
+                );
+
+            // Subscription Plain
+            modelBuilder.Entity<SubscriptionPlain>().HasData(
+                new SubscriptionPlain { Id = 1 , PlainName = "Starter" , ComaSeperated_Description= "Single User,Single Branch"}
+                );
+
+
             // Pages
 
             modelBuilder.Entity<Pages>().HasData(
@@ -120,14 +151,14 @@ namespace Client_On_Boarding.Data
                 new Pages { Id = 26, PageName = "Bank/Cash Ledger" },
                 new Pages { Id = 27, PageName = "Expenses Reports" },
                 new Pages { Id = 28, PageName = "Overall Daily Report" }
-                
+
             );
 
             // Page Field Settings
             modelBuilder.Entity<PagesFieldSettings>().HasData(
-                new PagesFieldSettings { Id = 1, PageId = 1, FieldName = "Product Name", IsView = true ,IsRequired = true },
-                new PagesFieldSettings { Id = 2, PageId = 1, FieldName = "Company", IsView = true,IsRequired = false },
-                new PagesFieldSettings { Id = 3, PageId = 1, FieldName = "Category", IsView = true ,IsRequired = true },
+                new PagesFieldSettings { Id = 1, PageId = 1, FieldName = "Product Name", IsView = true, IsRequired = true },
+                new PagesFieldSettings { Id = 2, PageId = 1, FieldName = "Company", IsView = true, IsRequired = false },
+                new PagesFieldSettings { Id = 3, PageId = 1, FieldName = "Category", IsView = true, IsRequired = true },
                 new PagesFieldSettings { Id = 4, PageId = 1, FieldName = "Main Unit", IsView = true, IsRequired = true },
                 new PagesFieldSettings { Id = 5, PageId = 1, FieldName = "Has Alternate Unit?", IsView = true, IsRequired = false },
                 new PagesFieldSettings { Id = 6, PageId = 1, FieldName = "Purchase Rate", IsView = true, IsRequired = false },
@@ -146,17 +177,17 @@ namespace Client_On_Boarding.Data
                 new PagesFieldSettings { Id = 19, PageId = 3, FieldName = "Vendor Name", IsView = true, IsRequired = true },
                 new PagesFieldSettings { Id = 20, PageId = 3, FieldName = "City", IsView = true, IsRequired = false },
                 new PagesFieldSettings { Id = 21, PageId = 3, FieldName = "Area By City", IsView = true, IsRequired = false },
-                new PagesFieldSettings { Id = 22, PageId = 3, FieldName = "Full Address", IsView = true, IsRequired = false},
-                new PagesFieldSettings { Id = 23 , PageId = 3, FieldName = "Office Phone",IsView = true, IsRequired = false},
-                new PagesFieldSettings { Id = 24 , PageId = 3, FieldName = "Contact No 1", IsView = true, IsRequired = false},
-                new PagesFieldSettings { Id = 25, PageId = 3, FieldName = "Contact No 2", IsView = true, IsRequired = false},
-                new PagesFieldSettings { Id = 26, PageId = 3, FieldName = "Opening Balance", IsView = true , IsRequired = false},
-                new PagesFieldSettings { Id = 27, PageId = 3,FieldName = "Active", IsView = true , IsRequired = false},
+                new PagesFieldSettings { Id = 22, PageId = 3, FieldName = "Full Address", IsView = true, IsRequired = false },
+                new PagesFieldSettings { Id = 23, PageId = 3, FieldName = "Office Phone", IsView = true, IsRequired = false },
+                new PagesFieldSettings { Id = 24, PageId = 3, FieldName = "Contact No 1", IsView = true, IsRequired = false },
+                new PagesFieldSettings { Id = 25, PageId = 3, FieldName = "Contact No 2", IsView = true, IsRequired = false },
+                new PagesFieldSettings { Id = 26, PageId = 3, FieldName = "Opening Balance", IsView = true, IsRequired = false },
+                new PagesFieldSettings { Id = 27, PageId = 3, FieldName = "Active", IsView = true, IsRequired = false },
                 new PagesFieldSettings { Id = 28, PageId = 4, FieldName = "Bank Name", IsView = true, IsRequired = true },
-                new PagesFieldSettings { Id = 29, PageId = 4, FieldName = "Account Holder",IsView = true , IsRequired = false},
-                new PagesFieldSettings { Id = 30, PageId = 4 ,FieldName = "Account No", IsView = true, IsRequired = false},
-                new PagesFieldSettings { Id = 31, PageId = 4, FieldName = "Address", IsView = true,IsRequired = false},
-                new PagesFieldSettings { Id = 32, PageId = 4 , FieldName = "Opening Balance", IsView = true,IsRequired = false},
+                new PagesFieldSettings { Id = 29, PageId = 4, FieldName = "Account Holder", IsView = true, IsRequired = false },
+                new PagesFieldSettings { Id = 30, PageId = 4, FieldName = "Account No", IsView = true, IsRequired = false },
+                new PagesFieldSettings { Id = 31, PageId = 4, FieldName = "Address", IsView = true, IsRequired = false },
+                new PagesFieldSettings { Id = 32, PageId = 4, FieldName = "Opening Balance", IsView = true, IsRequired = false },
                 new PagesFieldSettings { Id = 33, PageId = 4, FieldName = "Active", IsView = true, IsRequired = false }
             );
 
@@ -164,6 +195,6 @@ namespace Client_On_Boarding.Data
 
         }
 
-      
+
     }
 }

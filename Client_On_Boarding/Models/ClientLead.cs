@@ -33,5 +33,17 @@
         public string? Notes { get; set; }
 
         public string? PhotoPath { get; set; }
+
+        public string? InternalNotes { get; set; }
+
+        public string? UserName { get; set; }
+        public string? Password { get; set; }
+        public string? ConnectionString { get; set; }
+
+        public int? BillingId { get; set; }
+        public BillingCycle? BillingCycle { get; set; }
+
+        public int? SubsrcriptionId { get; set; }
+        public SubscriptionPlain? SubscriptionPlain { get; set; }
     }
 }

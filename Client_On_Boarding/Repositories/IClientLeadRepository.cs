@@ -34,6 +34,8 @@ namespace Client_On_Boarding.Repositories
                 .Include(x => x.LeadSource)
                 .Include(x => x.LeadStatus)
                 .Include(x => x.Priority)
+                .Include(x => x.BillingCycle)
+                .Include(x => x.SubscriptionPlain)
                 .ToListAsync();
         }
 
